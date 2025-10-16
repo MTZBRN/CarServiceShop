@@ -56,9 +56,19 @@ namespace CarServiceShopBackend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PartNumber")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("INTEGER");
@@ -79,16 +89,18 @@ namespace CarServiceShopBackend.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("LicensePlate")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("ServiceDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ServiceDescription")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("WorkHourPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WorkHours")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

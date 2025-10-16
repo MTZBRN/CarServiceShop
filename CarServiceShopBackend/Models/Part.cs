@@ -11,6 +11,9 @@ public class Part
     [Required]
     public string PartNumber { get; set; } // Pl.: "123-ABC"
 
+    public string Name { get; set; } // Pl.: "Stabilizátor"
+    public decimal Price { get; set; } // Pl.: 1500.00
+    public int Quantity { get; set; } // Pl.: 2
     [Required]
     public string Description { get; set; } // Pl.: "Stabilizátor pálca"
 

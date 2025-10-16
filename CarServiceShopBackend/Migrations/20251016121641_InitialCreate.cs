@@ -34,7 +34,8 @@ namespace CarServiceShopBackend.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    LicensePlate = table.Column<string>(type: "TEXT", nullable: false),
+                    WorkHours = table.Column<int>(type: "INTEGER", nullable: false),
+                    WorkHourPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     ServiceDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ServiceDescription = table.Column<string>(type: "TEXT", nullable: false),
                     CarId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -57,6 +58,9 @@ namespace CarServiceShopBackend.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PartNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     ServiceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
