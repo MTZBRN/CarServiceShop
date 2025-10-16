@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+d7ca1ae536e15a0c16403629484b5872951558da")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+7110f15ed775d6a841a1926646649ac2a7ddcf82")]
 [assembly: System.Reflection.AssemblyProductAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

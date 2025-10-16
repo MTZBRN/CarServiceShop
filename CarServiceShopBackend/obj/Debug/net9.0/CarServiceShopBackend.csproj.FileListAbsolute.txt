@@ -187,3 +187,8 @@
 /Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/obj/Debug/net9.0/CarServiceShopBackend.pdb
 /Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/obj/Debug/net9.0/CarServiceShopBackend.genruntimeconfig.cache
 /Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/obj/Debug/net9.0/ref/CarServiceShopBackend.dll
+/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/bin/Debug/net9.0/Microsoft.OpenApi.dll
+/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/obj/Debug/net9.0/CarServiceShopBackend.MvcApplicationPartsAssemblyInfo.cs
+/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
