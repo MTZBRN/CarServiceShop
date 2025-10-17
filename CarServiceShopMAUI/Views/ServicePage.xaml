@@ -3,7 +3,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarServiceShopMAUI.Views.ServicePage">
-    <ContentPage.Content>
+    <StackLayout Padding="10">
+
+        <CollectionView ItemsSource="{Binding Services}" SelectionMode="Single"
+                        SelectedItem="{Binding SelectedService, Mode=TwoWay}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="DarkBlue" Margin="5" Padding="10" CornerRadius="10">
+                        <StackLayout>
+                            <Label Text="{Binding Description}" FontAttributes="Bold"/>
+                            <Label Text="{Binding Date}" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Alkatrészek listázása -->
+        <Label Text="Alkatrészek" FontAttributes="Bold" Margin="0,20,0,0"/>
+        <CollectionView ItemsSource="{Binding Parts}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="DarkGreen" Margin="5" Padding="10" CornerRadius="10">
+                        <StackLayout>
+                            <Label Text="{Binding Name}" />
+                            <Label Text="{Binding PartNumber}" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Margin="0,20,0,0" Spacing="10" HorizontalOptions="Center">
+            <Button Text="Új Szerviz" Command="{Binding AddServiceCommand}" />
+            <Button Text="Szerkesztés" Command="{Binding EditServiceCommand}" IsEnabled="{Binding SelectedService, Converter={StaticResource NullToBoolConverter}}" />
+            <Button Text="Törlés" Command="{Binding DeleteServiceCommand}" IsEnabled="{Binding SelectedService, Converter={StaticResource NullToBoolConverter}}" />
+        </HorizontalStackLayout>
         
-    </ContentPage.Content>
+    </StackLayout>
+
 </ContentPage>

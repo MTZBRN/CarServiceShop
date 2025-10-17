@@ -3,7 +3,29 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarServiceShopMAUI.Views.CarListPage">
-    <ContentPage.Content>
+    <StackLayout Padding="10">
         
-    </ContentPage.Content>
+        <CollectionView ItemsSource="{Binding Cars}" SelectionMode="Single"
+                        SelectedItem="{Binding SelectedCar, Mode=TwoWay}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="Gray" Margin="5" Padding="10" CornerRadius="10">
+                        <StackLayout>
+                            <Label Text="{Binding LicensePlate}" FontAttributes="Bold"/>
+                            <Label Text="{Binding Brand}"/>
+                            <Label Text="{Binding Model}"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Margin="0,20,0,0" Spacing="10" HorizontalOptions="Center">
+            <Button Text="Új Autó" Command="{Binding AddCarCommand}" />
+            <Button Text="Szerkesztés" Command="{Binding EditCarCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
+            <Button Text="Törlés" Command="{Binding DeleteCarCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
+            <Button Text="Szervizek" Command="{Binding NavigateToServicesCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
+        </HorizontalStackLayout>
+        
+    </StackLayout>
 </ContentPage>

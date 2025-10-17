@@ -1,14 +1,23 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace CarServiceShopMAUI.Models;
 
-public class Part
+public partial class Part : ObservableObject
 {
-    public int Id { get; set; }
-    public string PartNumber { get; set; }
-    public string Description { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-    public int Quantity { get; set; }
-    
-    public int ServiceId { get; set; }
-    public Service Service { get; set; }
+    [ObservableProperty] 
+    private int id;
+    [ObservableProperty] 
+    private string partNumber;
+    [ObservableProperty] 
+    private string description;
+    [ObservableProperty] 
+    private string name;
+    [ObservableProperty] 
+    private decimal price;
+    [ObservableProperty] 
+    private int quantity;
+    [ObservableProperty] 
+    private int serviceId;
+    [ObservableProperty] 
+    private Service service;
 }
