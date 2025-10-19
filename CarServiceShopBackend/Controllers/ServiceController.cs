@@ -14,6 +14,14 @@ public class ServiceController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("bycar/{carId}")]
+    public async Task<ActionResult<IEnumerable<Service>>> GetByCar(int carId)
+    {
+        return await _context.Services
+                             .Where(s => s.CarId == carId)
+                             .ToListAsync();
+    }
+
     // GET: api/Services
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Service>>> GetServices()

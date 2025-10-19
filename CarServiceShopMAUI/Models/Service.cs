@@ -13,13 +13,14 @@ namespace CarServiceShopMAUI.Models
         public double WorkHours { get; set; }
 
         [JsonPropertyName("workHourPrice")]
-        public decimal WorkHourPrice { get; set; }
+        public double WorkHourPrice { get; set; }
 
         [JsonPropertyName("serviceDate")]
         public DateTime ServiceDate { get; set; }
 
         [JsonPropertyName("serviceDescription")]
         public string ServiceDescription { get; set; }
+        public double TotalPrice { get; set; }
 
         [JsonPropertyName("carId")]
         public int CarId { get; set; }

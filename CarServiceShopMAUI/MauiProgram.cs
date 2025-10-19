@@ -26,11 +26,22 @@ public static class MauiProgram
             client.Timeout = TimeSpan.FromSeconds(30);
         });
 
-        // Register ViewModels
+        // ViewModels
         builder.Services.AddTransient<CarListPageViewModel>();
+        builder.Services.AddTransient<CarDetailViewModel>();
+        builder.Services.AddTransient<ServicePageViewModel>();
+        builder.Services.AddTransient<ServiceDetailViewModel>();
+        builder.Services.AddTransient<PartListPageViewModel>();
+        builder.Services.AddTransient<PartDetailViewModel>();
 
-        // Register Pages
+        // Pages
         builder.Services.AddTransient<CarListPage>();
+        builder.Services.AddTransient<CarDetailPage>();
+        builder.Services.AddTransient<ServicePage>();
+        builder.Services.AddTransient<ServiceDetailPage>();
+        builder.Services.AddTransient<PartListPage>();
+        builder.Services.AddTransient<PartDetailPage>();
+
 
 #if DEBUG
         builder.Logging.AddDebug();

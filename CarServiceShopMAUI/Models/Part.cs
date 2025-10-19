@@ -15,7 +15,7 @@ namespace CarServiceShopMAUI.Models
         public string Name { get; set; }
 
         [JsonPropertyName("price")]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         [JsonPropertyName("quantity")]
         public int Quantity { get; set; }

@@ -1,15 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CarServiceShopMAUI.ViewModels;
 
-namespace CarServiceShopMAUI.Views;
-
-public partial class ServicePage : ContentPage
+namespace CarServiceShopMAUI.Views
 {
-    public ServicePage()
+    public partial class ServicePage : ContentPage
     {
-        InitializeComponent();
+        public ServicePage(ServicePageViewModel viewModel)
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            var viewModel = BindingContext as ServicePageViewModel;
+            if (viewModel != null)
+            {
+                await viewModel.LoadServicesCommand.ExecuteAsync(null);
+            }
+        }
     }
 }

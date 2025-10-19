@@ -136,11 +136,13 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
+
+
         public async Task<List<Service>> GetServicesForCarAsync(int carId)
         {
             try
             {
-                var result = await _httpClient.GetFromJsonAsync<List<Service>>($"car/{carId}/services", _jsonOptions);
+                var result = await _httpClient.GetFromJsonAsync<List<Service>>($"service/bycar/{carId}", _jsonOptions);
                 return result ?? new List<Service>();
             }
             catch (Exception ex)
@@ -197,7 +199,20 @@ namespace CarServiceShopMAUI.Services
             if (newService == null) throw new ArgumentNullException(nameof(newService));
             try
             {
+                // DEBUG: Nézd meg a teljes JSON-t
+                var json = System.Text.Json.JsonSerializer.Serialize(newService, _jsonOptions);
+                Debug.WriteLine($"📤 JSON being sent: {json}");
+
                 var response = await _httpClient.PostAsJsonAsync("service", newService, _jsonOptions);
+
+                Debug.WriteLine($"📥 Response: {response.StatusCode}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"❌ Error body: {errorBody}");
+                }
+
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -206,6 +221,7 @@ namespace CarServiceShopMAUI.Services
                 return false;
             }
         }
+
 
         public async Task<bool> UpdateServiceAsync(Service updatedService)
         {
@@ -266,10 +282,19 @@ namespace CarServiceShopMAUI.Services
 
         public async Task<bool> AddPartAsync(Part newPart)
         {
-            if (newPart == null) throw new ArgumentNullException(nameof(newPart));
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("part", newPart, _jsonOptions);
+                var payload = new
+                {
+                    id = newPart.Id,
+                    serviceId = newPart.ServiceId,
+                    partNumber = newPart.PartNumber,
+                    name = newPart.Name,
+                    price = newPart.Price,
+                    quantity = newPart.Quantity,
+                    description = newPart.Description
+                };
+                var response = await _httpClient.PostAsJsonAsync("part", payload, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -281,10 +306,19 @@ namespace CarServiceShopMAUI.Services
 
         public async Task<bool> UpdatePartAsync(Part updatedPart)
         {
-            if (updatedPart == null) throw new ArgumentNullException(nameof(updatedPart));
             try
             {
-                var response = await _httpClient.PutAsJsonAsync($"part/{updatedPart.Id}", updatedPart, _jsonOptions);
+                var payload = new
+                {
+                    id = updatedPart.Id,
+                    serviceId = updatedPart.ServiceId,
+                    partNumber = updatedPart.PartNumber,
+                    name = updatedPart.Name,
+                    price = updatedPart.Price,
+                    quantity = updatedPart.Quantity,
+                    description = updatedPart.Description
+                };
+                var response = await _httpClient.PutAsJsonAsync($"part/{updatedPart.Id}", payload, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

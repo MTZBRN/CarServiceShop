@@ -1,45 +1,136 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CarServiceShopMAUI.Views.ServicePage">
-    <StackLayout Padding="10">
+             x:Class="CarServiceShopMAUI.Views.ServicePage"
+             Title="{Binding PageTitle}">
 
-        <CollectionView ItemsSource="{Binding Services}" SelectionMode="Single"
-                        SelectedItem="{Binding SelectedService, Mode=TwoWay}">
+    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
+
+        <!-- Car Info Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="#2196F3" 
+               CornerRadius="10" 
+               Padding="15"
+               Margin="0,0,0,10">
+            <VerticalStackLayout>
+                <Label Text="{Binding CarInfo}" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+                <Label Text="{Binding ServiceCount, StringFormat='Szervizek száma: {0}'}" 
+                       FontSize="14"
+                       TextColor="White"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Services List -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Services}"
+                        SelectedItem="{Binding SelectedService}"
+                        SelectionMode="Single">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                     VerticalOptions="Center">
+                    <Label Text="🔧" 
+                           FontSize="48"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Még nincs szerviz ehhez az autóhoz" 
+                           FontSize="16"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BorderColor="DarkBlue" Margin="5" Padding="10" CornerRadius="10">
-                        <StackLayout>
-                            <Label Text="{Binding Description}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Date}" />
-                        </StackLayout>
+                    <Frame Padding="15" 
+                           Margin="5" 
+                           BackgroundColor="LightGray"
+                           CornerRadius="10">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto" 
+                              ColumnDefinitions="*,Auto">
+
+                            <!-- Service Date -->
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding ServiceDate, StringFormat='📅 Dátum: {0:yyyy.MM.dd}'}" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold"/>
+
+                            <!-- Description -->
+                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                   Text="{Binding ServiceDescription}" 
+                                   FontSize="16"
+                                   Margin="0,5,0,5"/>
+
+                            <!-- Work Hours -->
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Text="{Binding WorkHours, StringFormat='⏱️ Munkaóra: {0} óra'}" 
+                                   FontSize="14"
+                                   TextColor="Gray"/>
+
+                            <!-- Total Cost -->
+                            <Label Grid.Row="3" Grid.Column="0"
+                                   Text="{Binding TotalPrice, StringFormat='💰 Költség: {0:N0} Ft'}" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="Green"
+                                   Margin="0,5,0,0"/>
+
+                            <!-- Action Buttons -->
+                            <VerticalStackLayout Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" 
+                                                 Spacing="5"
+                                                 VerticalOptions="Center">
+                                <Button Text="🔧 Alkatrészek" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewPartsCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#FF9800"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        Padding="10,5"/>
+                                <Button Text="✏️" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditServiceCommand}"
+                                        BackgroundColor="#2196F3"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        WidthRequest="50"
+                                        Padding="5"/>
+                                <Button Text="🗑️" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteServiceCommand}"
+                                        BackgroundColor="#F44336"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        WidthRequest="50"
+                                        Padding="5"/>
+                            </VerticalStackLayout>
+                        </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!-- Alkatrészek listázása -->
-        <Label Text="Alkatrészek" FontAttributes="Bold" Margin="0,20,0,0"/>
-        <CollectionView ItemsSource="{Binding Parts}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame BorderColor="DarkGreen" Margin="5" Padding="10" CornerRadius="10">
-                        <StackLayout>
-                            <Label Text="{Binding Name}" />
-                            <Label Text="{Binding PartNumber}" />
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <!-- Bottom Buttons -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*" 
+              ColumnSpacing="10"
+              Margin="0,10,0,0">
+            <Button Grid.Column="0"
+                    Text="➕ Új szerviz" 
+                    Command="{Binding AddServiceCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"/>
 
-        <HorizontalStackLayout Margin="0,20,0,0" Spacing="10" HorizontalOptions="Center">
-            <Button Text="Új Szerviz" Command="{Binding AddServiceCommand}" />
-            <Button Text="Szerkesztés" Command="{Binding EditServiceCommand}" IsEnabled="{Binding SelectedService, Converter={StaticResource NullToBoolConverter}}" />
-            <Button Text="Törlés" Command="{Binding DeleteServiceCommand}" IsEnabled="{Binding SelectedService, Converter={StaticResource NullToBoolConverter}}" />
-        </HorizontalStackLayout>
-        
-    </StackLayout>
+            <Button Grid.Column="1"
+                    Text="◀️ Vissza" 
+                    Command="{Binding BackCommand}"
+                    BackgroundColor="#9E9E9E"
+                    TextColor="White"/>
+            <Button Grid.Column="1"
+                    Text="🔄 Frissítés"
+                    Command="{Binding LoadServicesCommand}"
+                    BackgroundColor="#FF9800"
+                    TextColor="White"/> 
+        </Grid>
+
+    </Grid>
 
 </ContentPage>

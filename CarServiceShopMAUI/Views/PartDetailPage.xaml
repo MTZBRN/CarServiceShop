@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CarServiceShopMAUI.Views.NewPage1"
+             Title="Binding PageTitle">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Cikkszám" FontAttributes="Bold"/>
+            <Entry Text="{Binding PartNumber}" Placeholder="pl. OIL-001"/>
+
+            <Label Text="Név" FontAttributes="Bold"/>
+            <Entry Text="{Binding Name}" Placeholder="pl. Motorolaj 5W-30"/>
+
+            <Label Text="Leírás" FontAttributes="Bold"/>
+            <Editor Text="{Binding Description}" Placeholder="Opcionális" HeightRequest="100"/>
+
+            <Label Text="Mennyiség" FontAttributes="Bold"/>
+            <Entry Text="{Binding Quantity}" Keyboard="Numeric"/>
+
+            <Label Text="Egységár (Ft)" FontAttributes="Bold"/>
+            <Entry Text="{Binding Price}" Keyboard="Numeric"/>
+
+            <Button Text="Mentés" Command="{Binding SaveCommand}" BackgroundColor="#4CAF50" TextColor="White" Margin="0,12,0,0"/>
+            <Button Text="Mégse" Command="{Binding CancelCommand}" BackgroundColor="#F44336" TextColor="White"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

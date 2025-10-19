@@ -5,7 +5,7 @@ namespace CarServiceShopBackend.Models;
 
 public class Service
 {
-    public Service(int id, int workHours, decimal workHourPrice, DateTime serviceDate, string serviceDescription, Car car, List<Part> parts)
+    public Service(int id, double workHours, double workHourPrice, DateTime serviceDate, string serviceDescription, Car car, List<Part> parts)
     {
         Id = id;
         WorkHours = workHours;
@@ -25,12 +25,12 @@ public class Service
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
-    public int WorkHours { get; set; }
-    public decimal WorkHourPrice { get; set; }
+    public double WorkHours { get; set; }
+    public double WorkHourPrice { get; set; }
     public DateTime ServiceDate { get; set; }
     public string ServiceDescription { get; set; }
     [ForeignKey("Car")]
     public int CarId { get; set; }
-    public Car Car { get; set; }
-    public List<Part> Parts { get; set; }
+    public Car? Car { get; set; }
+    public List<Part>? Parts { get; set; }
 }

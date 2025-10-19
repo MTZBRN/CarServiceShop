@@ -17,6 +17,7 @@ namespace CarServiceShopBackend.DbContext
         {
             base.OnModelCreating(modelBuilder);
 
+
             // Seed Cars
             modelBuilder.Entity<Car>().HasData(
                 new Car

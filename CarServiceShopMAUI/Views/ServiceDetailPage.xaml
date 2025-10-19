@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CarServiceShopMAUI.Views.ServiceDetailPage"
+             Title="{Binding PageTitle}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Szerviz leírása" FontAttributes="Bold"/>
+            <Editor Text="{Binding ServiceDescription}" 
+                    Placeholder="pl. Olajcsere és szűrőcsere"
+                    HeightRequest="100"/>
+
+            <Label Text="Munkaóra (óra)" FontAttributes="Bold"/>
+            <Entry Text="{Binding WorkHours}" 
+                   Placeholder="pl. 2.5"
+                   Keyboard="Numeric"/>
+
+            <Label Text="Óradíj (Ft)" FontAttributes="Bold"/>
+            <Entry Text="{Binding WorkHourPrice}" 
+                   Placeholder="pl. 15000"
+                   Keyboard="Numeric"/>
+
+            <Label Text="Szerviz dátuma" FontAttributes="Bold"/>
+            <DatePicker Date="{Binding ServiceDate}"
+                        MinimumDate="01/01/2020"
+                        MaximumDate="12/31/2030"/>
+
+            <Frame BackgroundColor="LightBlue" 
+                   Padding="15" 
+                   CornerRadius="10"
+                   Margin="0,10,0,0">
+                <Label Text="{Binding EstimatedCost, StringFormat='Becsült költség: {0:N0} Ft'}" 
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+            </Frame>
+
+            <Button Text="Mentés" 
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    Margin="0,20,0,0"/>
+
+            <Button Text="Mégse" 
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="#F44336"
+                    TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

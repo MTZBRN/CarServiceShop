@@ -38,6 +38,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Resourc
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/CarDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.CarDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\CarDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\CarDetailPage.xaml
+
 [C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/CarListPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.CarListPage.xaml
@@ -55,6 +61,24 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\MainPage.xaml
+
+[C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/PartDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.PartDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\PartDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\PartDetailPage.xaml
+
+[C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/PartListPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.PartListPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\PartListPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\PartListPage.xaml
+
+[C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/ServiceDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CarServiceShopMAUI.Views.ServiceDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ServiceDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ServiceDetailPage.xaml
 
 [C:/Users/mb200/source/repos/MTZBRN/CarServiceShop/CarServiceShopMAUI/Views/ServicePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
