@@ -1,6 +1,7 @@
-// csharp
+﻿// csharp
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -12,6 +13,7 @@ namespace CarServiceShopMAUI.Services
 {
     public class ApiService
     {
+        private readonly ApiService _apiService;
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
@@ -19,9 +21,8 @@ namespace CarServiceShopMAUI.Services
         };
 
         // Parameterless fallback to preserve existing usage
-        public ApiService() : this(new HttpClient { BaseAddress = new Uri("https://your-api-url.com/api/") })
-        {
-        }
+        public ApiService() : this(new HttpClient { BaseAddress = new Uri("http://localhost:5083/api/") }) { }
+
 
         // Preferred ctor for DI (IHttpClientFactory)
         public ApiService(HttpClient httpClient)
@@ -33,25 +34,50 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
+        public async Task<List<Car>> GetCarsAsync()
+        {
+            try
+            {
+                Debug.WriteLine("🔄 Calling API: GET car");
+                var result = await _httpClient.GetFromJsonAsync<List<Car>>("car", _jsonOptions);
+                Debug.WriteLine($"✅ API Success: Received {result?.Count ?? 0} cars");
+                return result ?? new List<Car>();
+            }
+            catch (Exception ex)
+            {
+                LogError(nameof(GetCarsAsync), ex);
+                Debug.WriteLine($"❌ API Error: {ex.Message}");
+                return new List<Car>();
+            }
+        }
+
+
         private void LogError(string context, Exception ex)
         {
             Debug.WriteLine($"ApiService error ({context}): {ex}");
         }
 
         // Car CRUD
-        public async Task<List<Car>> GetCarsAsync()
+
+        private async Task LoadCarsAsync()
         {
-            try
-            {
-                var result = await _httpClient.GetFromJsonAsync<List<Car>>("car", _jsonOptions);
-                return result ?? new List<Car>();
-            }
-            catch (Exception ex)
-            {
-                LogError(nameof(GetCarsAsync), ex);
-                return new List<Car>();
-            }
+            var carsFromApi = await _apiService.GetCarsAsync(); // ← Breakpoint ide
+            var Cars = new ObservableCollection<Car>(carsFromApi);  // ← És ide is
         }
+
+        //public async Task<List<Car>> GetCarsAsync()
+        //{
+        //    try
+        //    {
+        //        var result = await _httpClient.GetFromJsonAsync<List<Car>>("car", _jsonOptions);
+        //        return result ?? new List<Car>();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogError(nameof(GetCarsAsync), ex);
+        //        return new List<Car>();
+        //    }
+        //}
 
         public async Task<Car?> GetCarByIdAsync(int id)
         {

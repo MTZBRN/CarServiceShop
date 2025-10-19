@@ -1,31 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CarServiceShopMAUI.Views.CarListPage">
+             x:Class="CarServiceShopMAUI.Views.CarListPage"
+             Title="Autók listája">
     <StackLayout Padding="10">
-        
-        <CollectionView ItemsSource="{Binding Cars}" SelectionMode="Single"
-                        SelectedItem="{Binding SelectedCar, Mode=TwoWay}">
+
+        <!-- Debug info -->
+        <Label Text="{Binding Cars.Count, StringFormat='Betöltött autók: {0}'}" 
+               FontSize="16" 
+               FontAttributes="Bold"
+               TextColor="Blue"/>
+
+        <!-- Car list -->
+        <CollectionView ItemsSource="{Binding Cars}"
+                        SelectedItem="{Binding SelectedCar}"
+                        SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BorderColor="Gray" Margin="5" Padding="10" CornerRadius="10">
-                        <StackLayout>
-                            <Label Text="{Binding LicensePlate}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Brand}"/>
-                            <Label Text="{Binding Model}"/>
-                        </StackLayout>
-                    </Frame>
+                    <StackLayout Padding="10" BackgroundColor="LightGray" Margin="5">
+                        <Label Text="{Binding LicensePlate}" FontSize="18" FontAttributes="Bold"/>
+                        <Label Text="{Binding Brand}" FontSize="14"/>
+                        <Label Text="{Binding Model}" FontSize="14"/>
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <HorizontalStackLayout Margin="0,20,0,0" Spacing="10" HorizontalOptions="Center">
-            <Button Text="Új Autó" Command="{Binding AddCarCommand}" />
-            <Button Text="Szerkesztés" Command="{Binding EditCarCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
-            <Button Text="Törlés" Command="{Binding DeleteCarCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
-            <Button Text="Szervizek" Command="{Binding NavigateToServicesCommand}" IsEnabled="{Binding SelectedCar, Converter={StaticResource NullToBoolConverter}}" />
-        </HorizontalStackLayout>
-        
+        <!-- Load button -->
+        <Button Text="Autók betöltése" 
+                Command="{Binding LoadCarsCommand}"
+                Margin="0,10,0,0"/>
     </StackLayout>
 </ContentPage>

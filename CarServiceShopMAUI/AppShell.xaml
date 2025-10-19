@@ -6,8 +6,15 @@
     xmlns:local="clr-namespace:CarServiceShopMAUI"
     xmlns:views="clr-namespace:CarServiceShopMAUI.Views"
     Title="CarServiceShopMAUI">
+
+    <ShellContent
+        Title="Főoldal"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="Autók"
+        ContentTemplate="{DataTemplate views:CarListPage}"
+        Route="CarListPage" />
     
-    <ShellItem Route="root">
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
-    </ShellItem>
 </Shell>
