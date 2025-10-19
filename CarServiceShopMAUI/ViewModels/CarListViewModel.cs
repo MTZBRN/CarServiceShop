@@ -52,7 +52,14 @@ namespace CarServiceShopMAUI.ViewModels
             {
                 Debug.WriteLine("🔄 Loading cars from API...");
                 var carsFromApi = await _apiService.GetCarsAsync();
-                var Cars = new ObservableCollection<Car>(carsFromApi);
+
+                // Tisztítsd meg a listát és add hozzá egyesével
+                Cars.Clear();
+                foreach (var car in carsFromApi)
+                {
+                    Cars.Add(car);
+                }
+
                 Debug.WriteLine($"✅ Successfully loaded {Cars.Count} cars");
             }
             catch (Exception ex)
@@ -60,6 +67,7 @@ namespace CarServiceShopMAUI.ViewModels
                 Debug.WriteLine($"❌ Error in LoadCarsAsync: {ex.Message}");
             }
         }
+
 
         private async Task AddCarAsync()
         {

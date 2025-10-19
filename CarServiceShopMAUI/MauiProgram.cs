@@ -21,7 +21,9 @@ public static class MauiProgram
         // Register HttpClient with base address
         builder.Services.AddHttpClient<ApiService>(client =>
         {
-            client.BaseAddress = new Uri("https://localhost:5083/api/");
+            // FIX: Használd HTTP-t az 5083-as porton
+            client.BaseAddress = new Uri("http://localhost:5083/api/");
+            client.Timeout = TimeSpan.FromSeconds(30);
         });
 
         // Register ViewModels
