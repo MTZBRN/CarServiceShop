@@ -1,29 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopMAUI/CarServiceShopMAUI.csproj": {}
+    "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopMAUI\\CarServiceShopMAUI.csproj": {}
   },
   "projects": {
-    "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopMAUI/CarServiceShopMAUI.csproj": {
+    "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopMAUI\\CarServiceShopMAUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopMAUI/CarServiceShopMAUI.csproj",
+        "projectUniqueName": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopMAUI\\CarServiceShopMAUI.csproj",
         "projectName": "CarServiceShopMAUI",
-        "projectPath": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopMAUI/CarServiceShopMAUI.csproj",
-        "packagesPath": "/Users/barnus/.nuget/packages/",
-        "outputPath": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopMAUI/obj/",
+        "projectPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopMAUI\\CarServiceShopMAUI.csproj",
+        "packagesPath": "C:\\Users\\mb200\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopMAUI\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/barnus/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\mb200\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0-android",
           "net9.0-ios",
-          "net9.0-maccatalyst"
+          "net9.0-maccatalyst",
+          "net9.0-windows10.0.19041.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +45,10 @@
           "net9.0-maccatalyst26.0": {
             "targetAlias": "net9.0-maccatalyst",
             "projectReferences": {}
+          },
+          "net9.0-windows10.0.19041": {
+            "targetAlias": "net9.0-windows10.0.19041.0",
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -48,9 +59,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0-android35.0": {
@@ -75,8 +86,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.0, )",
+              "version": "[9.0.9, )",
               "autoReferenced": true
+            },
+            "Svg.Skia": {
+              "target": "Package",
+              "version": "[2.*, )"
             },
             "System.Net.Http.Json": {
               "target": "Package",
@@ -108,7 +123,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-ios26.0": {
           "targetAlias": "net9.0-ios",
@@ -132,8 +147,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.0, )",
+              "version": "[9.0.9, )",
               "autoReferenced": true
+            },
+            "Svg.Skia": {
+              "target": "Package",
+              "version": "[2.*, )"
             },
             "System.Net.Http.Json": {
               "target": "Package",
@@ -165,7 +184,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-maccatalyst26.0": {
           "targetAlias": "net9.0-maccatalyst",
@@ -189,8 +208,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.0, )",
+              "version": "[9.0.9, )",
               "autoReferenced": true
+            },
+            "Svg.Skia": {
+              "target": "Package",
+              "version": "[2.*, )"
             },
             "System.Net.Http.Json": {
               "target": "Package",
@@ -223,7 +246,62 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        },
+        "net9.0-windows10.0.19041": {
+          "targetAlias": "net9.0-windows10.0.19041.0",
+          "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.Extensions.Logging.Debug": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Maui.Controls": {
+              "target": "Package",
+              "version": "[9.0.111, )"
+            },
+            "Svg.Skia": {
+              "target": "Package",
+              "version": "[2.*, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.Windows.SDK.NET.Ref",
+              "version": "[10.0.19041.57, 10.0.19041.57]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.Windows.SDK.NET.Ref.Windows": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -233,10 +311,13 @@
         "android-x64": {
           "#import": []
         },
-        "iossimulator-arm64": {
+        "ios-arm64": {
           "#import": []
         },
-        "maccatalyst-arm64": {
+        "maccatalyst-x64": {
+          "#import": []
+        },
+        "win10-x64": {
           "#import": []
         }
       }

@@ -7,23 +7,7 @@
     xmlns:views="clr-namespace:CarServiceShopMAUI.Views"
     Title="CarServiceShopMAUI">
     
-    
-    <!--<FlyoutItem>
-        <ShellContent
-            Title="MainPage"
-            ContentTemplate="{DataTemplate local:MainPage}" 
-            Route="MainPage"/>
-    </FlyoutItem>
-    <FlyoutItem>
-        <ShellContent
-            Title="CarListPage"
-            ContentTemplate="{DataTemplate views:CarListPage}" 
-            Route="CarListPage"/>
-    </FlyoutItem>
-    <FlyoutItem>
-        <ShellContent
-            Title="MainPage"
-            ContentTemplate="{DataTemplate views:InvoicePage}" 
-            Route="InvoicePage"/>
-    </FlyoutItem>-->
+    <ShellItem Route="root">
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    </ShellItem>
 </Shell>

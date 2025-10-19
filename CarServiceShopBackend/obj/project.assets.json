@@ -60,11 +60,24 @@
           }
         }
       },
-      "Microsoft.AspNetCore.OpenApi/10.0.0-rc.2.25502.107": {
+      "Microsoft.AspNetCore.OpenApi/9.0.10": {
         "type": "package",
-        "build": {
-          "build/Microsoft.AspNetCore.OpenApi.targets": {}
-        }
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.17"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
         "type": "package",
@@ -1921,21 +1934,19 @@
         "logo.png"
       ]
     },
-    "Microsoft.AspNetCore.OpenApi/10.0.0-rc.2.25502.107": {
-      "sha512": "50Egznb0tgVvITuuQQhhQ2fCQqKsy+I7Cy2QopLZziDw/IRhvM+L5ZKA7AdsEr4x/lmuB0HnZPKjD8eRjkbVog==",
+    "Microsoft.AspNetCore.OpenApi/9.0.10": {
+      "sha512": "yAv5EDEi0Nkk75Vhxh6ppuXd/QIO8hzjGpAt/fGInMZWIX/mVwZ1IM50YFIWeLCVM8KDj0oFPQdcLeQ+9hEJsw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.openapi/10.0.0-rc.2.25502.107",
+      "path": "microsoft.aspnetcore.openapi/9.0.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
-        "analyzers/dotnet/cs/Microsoft.AspNetCore.OpenApi.SourceGenerators.dll",
-        "build/Microsoft.AspNetCore.OpenApi.targets",
-        "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll",
-        "lib/net10.0/Microsoft.AspNetCore.OpenApi.xml",
-        "microsoft.aspnetcore.openapi.10.0.0-rc.2.25502.107.nupkg.sha512",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.xml",
+        "microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
       ]
     },
@@ -5195,35 +5206,43 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Microsoft.AspNetCore.OpenApi >= 10.0.0-rc.2.25502.107",
+      "Microsoft.AspNetCore.OpenApi >= 9.0.10",
       "Microsoft.EntityFrameworkCore >= 9.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.10",
+      "Microsoft.OpenApi >= 1.6.25",
       "Swashbuckle.AspNetCore.SwaggerGen >= 9.0.6",
       "Swashbuckle.AspNetCore.SwaggerUI >= 9.0.6"
     ]
   },
   "packageFolders": {
-    "/Users/barnus/.nuget/packages/": {}
+    "C:\\Users\\mb200\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/CarServiceShopBackend.csproj",
+      "projectUniqueName": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
       "projectName": "CarServiceShopBackend",
-      "projectPath": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/CarServiceShopBackend.csproj",
-      "packagesPath": "/Users/barnus/.nuget/packages/",
-      "outputPath": "/Users/barnus/RiderProjects/MobilProg/Feleves/CarServiceShop/CarServiceShopBackend/obj/",
+      "projectPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
+      "packagesPath": "C:\\Users\\mb200\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/barnus/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\mb200\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5240,9 +5259,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -5250,7 +5269,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
-            "version": "[10.0.0-rc.2.25502.107, )"
+            "version": "[9.0.10, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -5269,6 +5288,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.10, )"
+          },
+          "Microsoft.OpenApi": {
+            "target": "Package",
+            "version": "[1.6.25, )"
           },
           "Swashbuckle.AspNetCore.SwaggerGen": {
             "target": "Package",
@@ -5298,7 +5321,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
