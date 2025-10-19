@@ -4,11 +4,26 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:CarServiceShopMAUI"
+    xmlns:views="clr-namespace:CarServiceShopMAUI.Views"
     Title="CarServiceShopMAUI">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    
+    
+    <!--<FlyoutItem>
+        <ShellContent
+            Title="MainPage"
+            ContentTemplate="{DataTemplate local:MainPage}" 
+            Route="MainPage"/>
+    </FlyoutItem>
+    <FlyoutItem>
+        <ShellContent
+            Title="CarListPage"
+            ContentTemplate="{DataTemplate views:CarListPage}" 
+            Route="CarListPage"/>
+    </FlyoutItem>
+    <FlyoutItem>
+        <ShellContent
+            Title="MainPage"
+            ContentTemplate="{DataTemplate views:InvoicePage}" 
+            Route="InvoicePage"/>
+    </FlyoutItem>-->
 </Shell>

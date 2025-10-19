@@ -4,7 +4,7 @@
              x:Class="CarServiceShopMAUI.MainPage">
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <Button Text="Autók listája" Command="{Binding NavigateToCarListCommand}" />
+        <Button Text="Autók listája" Command="{Binding OpenCarListCommand  }" />
     </StackLayout>
             
 </ContentPage>

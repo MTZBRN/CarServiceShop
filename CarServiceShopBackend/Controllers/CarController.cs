@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using CarServiceShopBackend.Models;
 using CarServiceShopBackend.DbContext;
+using CarServiceShopBackend.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+namespace CarServiceShopBackend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

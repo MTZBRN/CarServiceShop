@@ -1,11 +1,12 @@
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using CarServiceShopMAUI.Models;
 using CarServiceShopMAUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-[QueryProperty(nameof(CarId), "CarId")]
+namespace CarServiceShopMAUI.ViewModels;
+
+
 public partial class ServiceListPageViewModel : ObservableObject
 {
     private readonly ApiService _apiService;

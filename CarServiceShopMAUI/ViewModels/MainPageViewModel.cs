@@ -12,5 +12,11 @@ public partial class MainPageViewModel : ObservableObject
     {
         NavigateToCarListCommand = new AsyncRelayCommand(() => Shell.Current.GoToAsync(nameof(CarListPage)));
     }
+    
+    [RelayCommand]
+    public async Task  OpenCarList()
+    {
+        await Shell.Current.GoToAsync(nameof(CarListPage));
+    }
 }
 

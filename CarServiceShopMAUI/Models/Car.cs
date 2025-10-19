@@ -1,26 +1,30 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-
-namespace CarServiceShopMAUI.Models;
-
-public partial class Car : ObservableObject
+namespace CarServiceShopMAUI.Models
 {
-    
+    public class Car
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
 
-    [ObservableProperty] 
-    int id;
-    [ObservableProperty] 
-    string licensePlate;
-    [ObservableProperty] 
-    private string brand;
-    [ObservableProperty]
-    private string model;
-    [ObservableProperty]
-    private int yearOfManufacture;
-    [ObservableProperty] 
-    DateTime dateOfTechnicalInspection;
-    [ObservableProperty] 
-    ICollection<Service> serviceJobs;
+        [JsonPropertyName("licensePlate")]
+        public string LicensePlate { get; set; }
 
+        [JsonPropertyName("brand")]
+        public string Brand { get; set; }
 
+        [JsonPropertyName("model")]
+        public string Model { get; set; }
+
+        [JsonPropertyName("yearOfManufacture")]
+        public int YearOfManufacture { get; set; }
+
+        [JsonPropertyName("dateOfTechnicalInspection")]
+        public DateTime DateOfTechnicalInspection { get; set; }
+
+        [JsonPropertyName("serviceJobs")]
+        public List<Service> ServiceJobs { get; set; } = new();
+    }
 }

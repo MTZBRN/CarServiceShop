@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using CarServiceShopBackend.Models;
 
 namespace CarServiceShopBackend.DbContext;
 
@@ -8,9 +9,9 @@ public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
     }
 
-    public DbSet<CarServiceShopBackend.Models.Car> Cars { get; set; }
-    public DbSet<CarServiceShopBackend.Models.Service> Services { get; set; }
-    public DbSet<CarServiceShopBackend.Models.Part> Parts { get; set; }
+    public DbSet<Car> Cars { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<Part> Parts { get; set; }
     
     
     

@@ -1,23 +1,32 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+// File: `Models/Part.cs`
+using System.Text.Json.Serialization;
 
-namespace CarServiceShopMAUI.Models;
-
-public partial class Part : ObservableObject
+namespace CarServiceShopMAUI.Models
 {
-    [ObservableProperty] 
-    private int id;
-    [ObservableProperty] 
-    private string partNumber;
-    [ObservableProperty] 
-    private string description;
-    [ObservableProperty] 
-    private string name;
-    [ObservableProperty] 
-    private decimal price;
-    [ObservableProperty] 
-    private int quantity;
-    [ObservableProperty] 
-    private int serviceId;
-    [ObservableProperty] 
-    private Service service;
+    public class Part
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonPropertyName("partNumber")]
+        public string PartNumber { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("price")]
+        public decimal Price { get; set; }
+
+        [JsonPropertyName("quantity")]
+        public int Quantity { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("serviceId")]
+        public int ServiceId { get; set; }
+
+        [JsonPropertyName("service")]
+        public string Service { get; set; }
+    }
 }
