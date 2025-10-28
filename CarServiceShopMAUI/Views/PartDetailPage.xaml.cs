@@ -1,9 +1,12 @@
+using CarServiceShopMAUI.ViewModels;
+
 namespace CarServiceShopMAUI.Views;
 
 public partial class PartDetailPage : ContentPage
 {
-	public PartDetailPage()
-	{
-		
-	}
+    public PartDetailPage(PartDetailViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;  // Ez hiányzott!
+    }
 }
