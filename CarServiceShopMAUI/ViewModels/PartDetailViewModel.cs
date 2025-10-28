@@ -40,13 +40,19 @@ namespace CarServiceShopMAUI.ViewModels
         [ObservableProperty]
         private bool isEdit;
 
+        [ObservableProperty]
+        private bool isBusy;
+
+        // Számított tulajdonság - Összesen ár
+        public double TotalPrice => Quantity * Price;
+
         public IAsyncRelayCommand SaveCommand { get; }
         public IAsyncRelayCommand CancelCommand { get; }
 
         public PartDetailViewModel(ApiService api)
         {
             _api = api;
-            SaveCommand = new AsyncRelayCommand(SaveAsync);
+            SaveCommand = new AsyncRelayCommand(SaveAsync, () => !IsBusy);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
         }
 
@@ -55,88 +61,159 @@ namespace CarServiceShopMAUI.ViewModels
             if (value > 0)
             {
                 IsEdit = true;
-                PageTitle = "Alkatrész szerkesztése";
+                PageTitle = "🔧 Alkatrész szerkesztése";
                 _ = LoadAsync(value);
             }
             else
             {
                 IsEdit = false;
-                PageTitle = "Új alkatrész";
+                PageTitle = "➕ Új alkatrész";
             }
+        }
+
+        // Frissítjük a TotalPrice-t, amikor változik a quantity vagy price
+        partial void OnQuantityChanged(int value)
+        {
+            OnPropertyChanged(nameof(TotalPrice));
+        }
+
+        partial void OnPriceChanged(double value)
+        {
+            OnPropertyChanged(nameof(TotalPrice));
+        }
+
+        partial void OnIsBusyChanged(bool value)
+        {
+            SaveCommand.NotifyCanExecuteChanged();
         }
 
         private async Task LoadAsync(int id)
         {
-            var p = await _api.GetPartByIdAsync(id);
-            if (p != null)
+            try
             {
-                PartNumber = p.PartNumber;
-                Name = p.Name;
-                Description = p.Description ?? string.Empty;
-                Quantity = p.Quantity;
-                Price = p.Price;
+                IsBusy = true;
+                Debug.WriteLine($"🔍 Loading part with ID: {id}");
+                
+                var p = await _api.GetPartByIdAsync(id);
+                if (p != null)
+                {
+                    PartNumber = p.PartNumber ?? string.Empty;
+                    Name = p.Name ?? string.Empty;
+                    Description = p.Description ?? string.Empty;
+                    Quantity = p.Quantity;
+                    Price = p.Price;
+                    
+                    Debug.WriteLine($"✅ Part loaded: {Name}");
+                }
+                else
+                {
+                    Debug.WriteLine($"❌ Part with ID {id} not found");
+                    await Shell.Current.DisplayAlert("Hiba", "Az alkatrész nem található!", "OK");
+                    await Shell.Current.GoToAsync("..");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Error loading part: {ex.Message}");
+                await Shell.Current.DisplayAlert("Hiba", "Nem sikerült betölteni az alkatrészt!", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
         private async Task SaveAsync()
         {
-            // egyszerű validáció
-            if (string.IsNullOrWhiteSpace(PartNumber))
+            try
             {
-                await Shell.Current.DisplayAlert("Hiba", "A cikkszám kötelező!", "OK");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(Name))
-            {
-                await Shell.Current.DisplayAlert("Hiba", "A név kötelező!", "OK");
-                return;
-            }
-            if (Quantity <= 0)
-            {
-                await Shell.Current.DisplayAlert("Hiba", "A mennyiség legyen pozitív!", "OK");
-                return;
-            }
-            if (Price < 0)
-            {
-                await Shell.Current.DisplayAlert("Hiba", "Az ár nem lehet negatív!", "OK");
-                return;
-            }
+                IsBusy = true;
+                
+                // Részletes validáció
+                if (string.IsNullOrWhiteSpace(PartNumber))
+                {
+                    await Shell.Current.DisplayAlert("Validációs hiba", "A cikkszám megadása kötelező!", "OK");
+                    return;
+                }
+                
+                if (string.IsNullOrWhiteSpace(Name))
+                {
+                    await Shell.Current.DisplayAlert("Validációs hiba", "Az alkatrész nevének megadása kötelező!", "OK");
+                    return;
+                }
+                
+                if (Quantity <= 0)
+                {
+                    await Shell.Current.DisplayAlert("Validációs hiba", "A mennyiség csak pozitív szám lehet!", "OK");
+                    return;
+                }
+                
+                if (Price < 0)
+                {
+                    await Shell.Current.DisplayAlert("Validációs hiba", "Az ár nem lehet negatív!", "OK");
+                    return;
+                }
 
-            var part = new Part
-            {
-                Id = PartId,
-                ServiceId = ServiceId,
-                PartNumber = PartNumber.Trim(),
-                Name = Name.Trim(),
-                Description = string.IsNullOrWhiteSpace(Description) ? null : Description.Trim(),
-                Quantity = Quantity,
-                Price = Price
-            };
+                Debug.WriteLine($"💾 Saving part: {Name} (ServiceId: {ServiceId})");
 
-            bool ok;
-            if (IsEdit)
-                ok = await _api.UpdatePartAsync(part);
-            else
-                ok = await _api.AddPartAsync(part);
+                var part = new Part
+                {
+                    Id = PartId,
+                    ServiceId = ServiceId,
+                    PartNumber = PartNumber.Trim(),
+                    Name = Name.Trim(),
+                    Description = string.IsNullOrWhiteSpace(Description) ? null : Description.Trim(),
+                    Quantity = Quantity,
+                    Price = Price
+                };
 
-            if (ok)
-            {
-                // Szóljunk vissza a listának
-                WeakReferenceMessenger.Default.Send(new PartChangedMessage(ServiceId));
+                bool success;
+                if (IsEdit)
+                {
+                    Debug.WriteLine($"🔄 Updating part ID: {PartId}");
+                    success = await _api.UpdatePartAsync(part);
+                }
+                else
+                {
+                    Debug.WriteLine($"➕ Creating new part");
+                    success = await _api.AddPartAsync(part);
+                }
 
-                await Shell.Current.DisplayAlert("Siker",
-                    IsEdit ? "Alkatrész módosítva!" : "Alkatrész hozzáadva!",
-                    "OK");
-                await Shell.Current.GoToAsync("..");
+                if (success)
+                {
+                    Debug.WriteLine($"✅ Part saved successfully");
+                    
+                    // Értesítjük a PartListPage-t a változásról
+                    WeakReferenceMessenger.Default.Send(new PartChangedMessage(ServiceId));
+
+                    await Shell.Current.DisplayAlert("Siker", 
+                        IsEdit ? "Az alkatrész sikeresen módosítva!" : "Az alkatrész sikeresen hozzáadva!", 
+                        "OK");
+                    
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    Debug.WriteLine($"❌ Failed to save part");
+                    await Shell.Current.DisplayAlert("Hiba", 
+                        IsEdit ? "Nem sikerült módosítani az alkatrészt!" : "Nem sikerült hozzáadni az alkatrészt!", 
+                        "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni az alkatrészt!", "OK");
+                Debug.WriteLine($"❌ Error saving part: {ex.Message}");
+                await Shell.Current.DisplayAlert("Hiba", $"Váratlan hiba történt: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
         private async Task CancelAsync()
         {
+            Debug.WriteLine($"❌ Part editing cancelled");
             await Shell.Current.GoToAsync("..");
         }
     }
