@@ -1,4 +1,4 @@
-﻿// csharp
+// csharp
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +13,6 @@ namespace CarServiceShopMAUI.Services
 {
     public class ApiService
     {
-        private readonly ApiService _apiService;
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
@@ -23,17 +22,22 @@ namespace CarServiceShopMAUI.Services
         // Parameterless fallback to preserve existing usage
         public ApiService() : this(new HttpClient { BaseAddress = new Uri("http://localhost:5083/api/") }) { }
 
-
         // Preferred ctor for DI (IHttpClientFactory)
         public ApiService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             if (_httpClient.BaseAddress == null)
             {
-                _httpClient.BaseAddress = new Uri("https://your-api-url.com/api/");
+                _httpClient.BaseAddress = new Uri("http://localhost:5083/api/");
             }
         }
 
+        private void LogError(string context, Exception ex)
+        {
+            Debug.WriteLine($"ApiService error ({context}): {ex}");
+        }
+
+        // Car CRUD
         public async Task<List<Car>> GetCarsAsync()
         {
             try
@@ -50,34 +54,6 @@ namespace CarServiceShopMAUI.Services
                 return new List<Car>();
             }
         }
-
-
-        private void LogError(string context, Exception ex)
-        {
-            Debug.WriteLine($"ApiService error ({context}): {ex}");
-        }
-
-        // Car CRUD
-
-        private async Task LoadCarsAsync()
-        {
-            var carsFromApi = await _apiService.GetCarsAsync(); // ← Breakpoint ide
-            var Cars = new ObservableCollection<Car>(carsFromApi);  // ← És ide is
-        }
-
-        //public async Task<List<Car>> GetCarsAsync()
-        //{
-        //    try
-        //    {
-        //        var result = await _httpClient.GetFromJsonAsync<List<Car>>("car", _jsonOptions);
-        //        return result ?? new List<Car>();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogError(nameof(GetCarsAsync), ex);
-        //        return new List<Car>();
-        //    }
-        //}
 
         public async Task<Car?> GetCarByIdAsync(int id)
         {
@@ -136,36 +112,6 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
-
-
-        public async Task<List<Service>> GetServicesForCarAsync(int carId)
-        {
-            try
-            {
-                var result = await _httpClient.GetFromJsonAsync<List<Service>>($"service/bycar/{carId}", _jsonOptions);
-                return result ?? new List<Service>();
-            }
-            catch (Exception ex)
-            {
-                LogError($"{nameof(GetServicesForCarAsync)}({carId})", ex);
-                return new List<Service>();
-            }
-        }
-
-        public async Task<List<Part>> GetPartsForServiceAsync(int serviceId)
-        {
-            try
-            {
-                var result = await _httpClient.GetFromJsonAsync<List<Part>>($"service/{serviceId}/parts", _jsonOptions);
-                return result ?? new List<Part>();
-            }
-            catch (Exception ex)
-            {
-                LogError($"{nameof(GetPartsForServiceAsync)}({serviceId})", ex);
-                return new List<Part>();
-            }
-        }
-
         // Service CRUD
         public async Task<List<Service>> GetServicesAsync()
         {
@@ -177,6 +123,22 @@ namespace CarServiceShopMAUI.Services
             catch (Exception ex)
             {
                 LogError(nameof(GetServicesAsync), ex);
+                return new List<Service>();
+            }
+        }
+
+        public async Task<List<Service>> GetServicesForCarAsync(int carId)
+        {
+            try
+            {
+                Debug.WriteLine($"🔄 Calling API: GET service/bycar/{carId}");
+                var result = await _httpClient.GetFromJsonAsync<List<Service>>($"service/bycar/{carId}", _jsonOptions);
+                Debug.WriteLine($"✅ API Success: Received {result?.Count ?? 0} services for car {carId}");
+                return result ?? new List<Service>();
+            }
+            catch (Exception ex)
+            {
+                LogError($"{nameof(GetServicesForCarAsync)}({carId})", ex);
                 return new List<Service>();
             }
         }
@@ -222,7 +184,6 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
-
         public async Task<bool> UpdateServiceAsync(Service updatedService)
         {
             if (updatedService == null) throw new ArgumentNullException(nameof(updatedService));
@@ -267,6 +228,27 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
+        /// <summary>
+        /// 🔧 Javított metódus - most már a helyes endpoint-ot használja!
+        /// </summary>
+        public async Task<List<Part>> GetPartsForServiceAsync(int serviceId)
+        {
+            try
+            {
+                Debug.WriteLine($"🔄 Calling API: GET part/byservice/{serviceId}");
+                // Ez most már a helyes endpoint: part/byservice/{serviceId}
+                var result = await _httpClient.GetFromJsonAsync<List<Part>>($"part/byservice/{serviceId}", _jsonOptions);
+                Debug.WriteLine($"✅ API Success: Received {result?.Count ?? 0} parts for service {serviceId}");
+                return result ?? new List<Part>();
+            }
+            catch (Exception ex)
+            {
+                LogError($"{nameof(GetPartsForServiceAsync)}({serviceId})", ex);
+                Debug.WriteLine($"❌ Error getting parts for service {serviceId}: {ex.Message}");
+                return new List<Part>();
+            }
+        }
+
         public async Task<Part?> GetPartByIdAsync(int id)
         {
             try
@@ -282,19 +264,10 @@ namespace CarServiceShopMAUI.Services
 
         public async Task<bool> AddPartAsync(Part newPart)
         {
+            if (newPart == null) throw new ArgumentNullException(nameof(newPart));
             try
             {
-                var payload = new
-                {
-                    id = newPart.Id,
-                    serviceId = newPart.ServiceId,
-                    partNumber = newPart.PartNumber,
-                    name = newPart.Name,
-                    price = newPart.Price,
-                    quantity = newPart.Quantity,
-                    description = newPart.Description
-                };
-                var response = await _httpClient.PostAsJsonAsync("part", payload, _jsonOptions);
+                var response = await _httpClient.PostAsJsonAsync("part", newPart, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -306,19 +279,10 @@ namespace CarServiceShopMAUI.Services
 
         public async Task<bool> UpdatePartAsync(Part updatedPart)
         {
+            if (updatedPart == null) throw new ArgumentNullException(nameof(updatedPart));
             try
             {
-                var payload = new
-                {
-                    id = updatedPart.Id,
-                    serviceId = updatedPart.ServiceId,
-                    partNumber = updatedPart.PartNumber,
-                    name = updatedPart.Name,
-                    price = updatedPart.Price,
-                    quantity = updatedPart.Quantity,
-                    description = updatedPart.Description
-                };
-                var response = await _httpClient.PutAsJsonAsync($"part/{updatedPart.Id}", payload, _jsonOptions);
+                var response = await _httpClient.PutAsJsonAsync($"part/{updatedPart.Id}", updatedPart, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
