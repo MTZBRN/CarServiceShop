@@ -7,6 +7,6 @@ public partial class PartDetailPage : ContentPage
     public PartDetailPage(PartDetailViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;  // Ez hiányzott!
+        BindingContext = viewModel; 
     }
 }

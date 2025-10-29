@@ -267,15 +267,47 @@ namespace CarServiceShopMAUI.Services
             if (newPart == null) throw new ArgumentNullException(nameof(newPart));
             try
             {
+                Debug.WriteLine("=== PART ADD DEBUG START ===");
+                Debug.WriteLine($"🔍 ServiceId: {newPart.ServiceId}");
+                Debug.WriteLine($"🔍 PartNumber: {newPart.PartNumber}");
+                Debug.WriteLine($"🔍 Name: {newPart.Name}");
+                Debug.WriteLine($"🔍 Price: {newPart.Price}");
+                Debug.WriteLine($"🔍 Quantity: {newPart.Quantity}");
+                Debug.WriteLine($"🔍 Description: {newPart.Description}");
+                Debug.WriteLine($"🔍 Base URL: {_httpClient.BaseAddress}");
+
+                // JSON serialization teszt
+                var json = System.Text.Json.JsonSerializer.Serialize(newPart, _jsonOptions);
+                Debug.WriteLine($"📤 JSON being sent: {json}");
+
                 var response = await _httpClient.PostAsJsonAsync("part", newPart, _jsonOptions);
+
+                Debug.WriteLine($"📥 Response Status: {response.StatusCode}");
+                Debug.WriteLine($"📥 Response IsSuccess: {response.IsSuccessStatusCode}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"❌ Error Response Body: {errorBody}");
+                }
+                else
+                {
+                    var successBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"✅ Success Response Body: {successBody}");
+                }
+
+                Debug.WriteLine("=== PART ADD DEBUG END ===");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"❌ Exception in AddPartAsync: {ex.Message}");
+                Debug.WriteLine($"❌ Stack Trace: {ex.StackTrace}");
                 LogError(nameof(AddPartAsync), ex);
                 return false;
             }
         }
+
 
         public async Task<bool> UpdatePartAsync(Part updatedPart)
         {

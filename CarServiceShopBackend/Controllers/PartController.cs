@@ -20,43 +20,41 @@ public class PartController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Part>>> GetParts()
     {
-        return await _context.Parts
-            .Include(p => p.Service)
-            .ToListAsync();
+        // 🔧 JAVÍTÁS: Ne Include-old, hogy elkerüljük a circular reference-t
+        var parts = await _context.Parts.ToListAsync();
+        return parts;
     }
 
     // GET: api/Parts/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Part>> GetPart(int id)
     {
-        var part = await _context.Parts
-            .Include(p => p.Service)
-            .FirstOrDefaultAsync(p => p.Id == id);
-        
+        var part = await _context.Parts.FindAsync(id);
         if (part == null) return NotFound();
         return part;
     }
 
-    // GET: api/Parts/byservice/5 - Javított endpoint hibakezeléssel!
+    // GET: api/Parts/byservice/5 - Javított endpoint
     [HttpGet("byservice/{serviceId}")]
     public async Task<ActionResult<IEnumerable<Part>>> GetPartsByService(int serviceId)
     {
         try
         {
             _logger.LogInformation($"🔍 Getting parts for ServiceId: {serviceId}");
-            
+
             // Ellenőrizzük, hogy létezik-e a Service
             var serviceExists = await _context.Services.AnyAsync(s => s.Id == serviceId);
             if (!serviceExists)
             {
                 _logger.LogWarning($"⚠️ Service with ID {serviceId} not found");
-                return Ok(new List<Part>()); // Üres lista visszaadása NotFound helyett
+                return Ok(new List<Part>()); // Üres lista visszaadása
             }
-            
+
+            // 🔧 JAVÍTÁS: Ne Include-old
             var parts = await _context.Parts
                 .Where(p => p.ServiceId == serviceId)
-                .ToListAsync(); // Include(p => p.Service) eltávolítva ideiglenesen
-            
+                .ToListAsync();
+
             _logger.LogInformation($"✅ Found {parts.Count} parts for ServiceId: {serviceId}");
             return parts;
         }
@@ -73,26 +71,25 @@ public class PartController : ControllerBase
     {
         try
         {
+            _logger.LogInformation($"📝 Creating part: {part.Name}");
+
             // Ellenőrizzük, hogy létezik-e a Service
             var serviceExists = await _context.Services.AnyAsync(s => s.Id == part.ServiceId);
             if (!serviceExists)
             {
+                _logger.LogWarning($"⚠️ Service with ID {part.ServiceId} not found");
                 return BadRequest($"Service with ID {part.ServiceId} does not exist.");
             }
 
             _context.Parts.Add(part);
             await _context.SaveChangesAsync();
-            
-            // Visszaadjuk a teljes objektumot a Service navigációs tulajdonsággal
-            var createdPart = await _context.Parts
-                .Include(p => p.Service)
-                .FirstOrDefaultAsync(p => p.Id == part.Id);
-                
-            return CreatedAtAction(nameof(GetPart), new { id = part.Id }, createdPart);
+
+            _logger.LogInformation($"✅ Part created successfully with ID: {part.Id}");
+            return CreatedAtAction(nameof(GetPart), new { id = part.Id }, part);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating part");
+            _logger.LogError(ex, "❌ Error creating part");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
@@ -102,7 +99,7 @@ public class PartController : ControllerBase
     public async Task<IActionResult> PutPart(int id, Part part)
     {
         if (id != part.Id) return BadRequest();
-        
+
         try
         {
             // Ellenőrizzük, hogy létezik-e a Service
@@ -114,7 +111,7 @@ public class PartController : ControllerBase
 
             _context.Entry(part).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            
+
             return NoContent();
         }
         catch (DbUpdateConcurrencyException)
@@ -140,7 +137,7 @@ public class PartController : ControllerBase
         {
             var part = await _context.Parts.FindAsync(id);
             if (part == null) return NotFound();
-            
+
             _context.Parts.Remove(part);
             await _context.SaveChangesAsync();
             return NoContent();

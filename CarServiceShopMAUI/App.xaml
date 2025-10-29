@@ -7,8 +7,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <Color x:Key="PrimaryColor">#445d96</Color>
+            <Color x:Key="SecondaryColor">#c5d0e8</Color>
+            <Color x:Key="TextColor">#000000</Color>
 
-            <ResourceDictionary.MergedDictionaries>
+
+                    <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>

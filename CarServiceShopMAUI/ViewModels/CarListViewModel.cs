@@ -24,6 +24,8 @@ namespace CarServiceShopMAUI.ViewModels
         public IAsyncRelayCommand EditCarCommand { get; }
         public IAsyncRelayCommand NavigateToServicesCommand { get; }
 
+        public IAsyncRelayCommand CarSearchQuery { get; }
+
         public CarListPageViewModel(ApiService apiService)
         {
             _apiService = apiService;
@@ -125,5 +127,10 @@ namespace CarServiceShopMAUI.ViewModels
             Debug.WriteLine($"🔧 Navigate to services for car: {SelectedCar.LicensePlate}");
             await Shell.Current.GoToAsync($"{nameof(ServicePage)}?CarId={SelectedCar.Id}");
         }
+
+        //private async Task CarSearchQuery()
+        //{
+        //    // Implement search functionality here
+        //}
     }
 }

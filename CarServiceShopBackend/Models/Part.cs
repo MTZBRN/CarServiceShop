@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CarServiceShopBackend.Models;
 
@@ -19,8 +20,8 @@ public class Part
 
     [ForeignKey("Service")]
     public int ServiceId { get; set; }
-
-    public Service Service { get; set; }
+    
+    public virtual Service? Service { get; set; }
 
     public Part(int id, string partNumber, string name, double price, int quantity, string description, int serviceId)
     {

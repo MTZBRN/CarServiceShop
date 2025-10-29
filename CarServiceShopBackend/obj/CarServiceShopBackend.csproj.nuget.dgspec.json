@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj": {}
+    "C:\\Users\\bmetzger\\Projects\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj": {
+    "C:\\Users\\bmetzger\\Projects\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
+        "projectUniqueName": "C:\\Users\\bmetzger\\Projects\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
         "projectName": "CarServiceShopBackend",
-        "projectPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
-        "packagesPath": "C:\\Users\\mb200\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mb200\\source\\repos\\MTZBRN\\CarServiceShop\\CarServiceShopBackend\\obj\\",
+        "projectPath": "C:\\Users\\bmetzger\\Projects\\CarServiceShop\\CarServiceShopBackend\\CarServiceShopBackend.csproj",
+        "packagesPath": "C:\\Users\\bmetzger\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bmetzger\\Projects\\CarServiceShop\\CarServiceShopBackend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\mb200\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\bmetzger\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -45,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -105,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

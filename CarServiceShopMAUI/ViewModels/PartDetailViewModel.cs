@@ -128,7 +128,11 @@ namespace CarServiceShopMAUI.ViewModels
             try
             {
                 IsBusy = true;
-                
+
+                Debug.WriteLine($"🔍 ServiceId: {ServiceId}");
+                Debug.WriteLine($"🔍 PartNumber: {PartNumber}");
+                Debug.WriteLine($"🔍 Name: {Name}");
+
                 // Részletes validáció
                 if (string.IsNullOrWhiteSpace(PartNumber))
                 {

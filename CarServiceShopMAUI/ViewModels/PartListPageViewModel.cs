@@ -90,6 +90,8 @@ namespace CarServiceShopMAUI.ViewModels
 
         private async Task AddPartAsync()
         {
+            Debug.WriteLine($"🔍 Navigating with ServiceId: {ServiceId}");
+
             var nav = new Dictionary<string, object>
             {
                 { "ServiceId", ServiceId }

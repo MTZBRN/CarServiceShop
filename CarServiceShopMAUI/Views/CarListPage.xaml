@@ -2,7 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarServiceShopMAUI.Views.CarListPage"
-             Title="Autók listája">
+             Title="Autók listája"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+    >
+    <Grid>
+        <Image Source="carlistimg.png"
+           Aspect="AspectFill"/>
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="10">
 
@@ -14,6 +20,11 @@
                TextColor="Blue"
                Margin="0,0,0,10"/>
 
+        <!-- Search Bar -->
+        <SearchBar Grid.Row="0"
+                   Placeholder="Keresés rendszám, márka vagy modell alapján..."
+                   Text="{Binding CarSearchQuery}"
+                   Margin="0,30,0,10"/>
         <!-- Car List -->
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Cars}"
@@ -96,6 +107,7 @@
                     TextColor="White"/>
         </Grid>
 
+    </Grid>
     </Grid>
 
 </ContentPage>

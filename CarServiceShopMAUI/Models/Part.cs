@@ -26,7 +26,7 @@ namespace CarServiceShopMAUI.Models
         [JsonPropertyName("serviceId")]
         public int ServiceId { get; set; }
 
-        [JsonPropertyName("service")]
+        [JsonIgnore]
         public string Service { get; set; }
     }
 }
