@@ -22,7 +22,8 @@ public static class MauiProgram
         builder.Services.AddHttpClient<ApiService>(client =>
         {
             // FIX: Használd HTTP-t az 5083-as porton
-            client.BaseAddress = new Uri("http://localhost:5083/api/");
+            // Development tunnel URL
+            client.BaseAddress = new Uri("https://nkwjlv9j-5083.euw.devtunnels.ms/api/");
             client.Timeout = TimeSpan.FromSeconds(30);
         });
 

@@ -2,61 +2,55 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarServiceShopMAUI.Views.CarListPage"
-             Title="Autók listája"
-                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+             Title="Autók listája">
 
-    >
-    <Grid>
-        <Image Source="carlistimg.png"
-           Aspect="AspectFill"/>
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="10">
 
-        <!-- Header -->
-        <Label Grid.Row="0"
+    <!-- Header -->
+    <Label Grid.Row="0"
                Text="{Binding Cars.Count, StringFormat='Betöltött autók: {0}'}" 
                FontSize="16" 
                FontAttributes="Bold"
                TextColor="Blue"
                Margin="0,0,0,10"/>
 
-        <!-- Search Bar -->
-        <SearchBar Grid.Row="0"
+    <!-- Search Bar -->
+    <SearchBar Grid.Row="0"
                    Placeholder="Keresés rendszám, márka vagy modell alapján..."
                    Text="{Binding CarSearchQuery}"
                    Margin="0,30,0,10"/>
-        <!-- Car List -->
-        <CollectionView Grid.Row="1"
+    <!-- Car List -->
+    <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Cars}"
                         SelectedItem="{Binding SelectedCar}"
                         SelectionMode="Single">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" 
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Border Padding="10" 
                            Margin="5" 
-                           BackgroundColor="LightGray"
-                           CornerRadius="10">
-                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                           BackgroundColor="Gray">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
 
-                            <!-- Car Info -->
-                            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                                <Label Text="{Binding LicensePlate}" 
+                        <!-- Car Info -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="{Binding LicensePlate}" 
                                        FontSize="18" 
                                        FontAttributes="Bold"/>
-                                <Label Text="{Binding Brand}" 
+                            <Label Text="{Binding Brand}" 
                                        FontSize="14"/>
-                                <Label Text="{Binding Model}" 
+                            <Label Text="{Binding Model}" 
                                        FontSize="14"/>
-                                <Label Text="{Binding YearOfManufacture, StringFormat='Évjárat: {0}'}" 
+                            <Label Text="{Binding YearOfManufacture, StringFormat='Évjárat: {0}'}" 
                                        FontSize="12"
                                        TextColor="Gray"/>
-                            </VerticalStackLayout>
+                        </VerticalStackLayout>
 
-                            <!-- Action Buttons (Right side) -->
-                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" 
+                        <!-- Action Buttons (Right side) -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" 
                                                  Spacing="5"
                                                  VerticalOptions="Center">
-                                <Button Text="✏️" 
+                            <Button Text="✏️" 
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCarCommand}"
                                         BackgroundColor="#2196F3"
                                         TextColor="White"
@@ -64,7 +58,7 @@
                                         WidthRequest="50"
                                         HeightRequest="40"
                                         Padding="5"/>
-                                <Button Text="🗑️" 
+                            <Button Text="🗑️" 
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCarCommand}"
                                         BackgroundColor="#F44336"
                                         TextColor="White"
@@ -72,10 +66,10 @@
                                         WidthRequest="50"
                                         HeightRequest="40"
                                         Padding="5"/>
-                            </VerticalStackLayout>
+                        </VerticalStackLayout>
 
-                            <!-- Services Button (Bottom, full width) -->
-                            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                        <!-- Services Button (Bottom, full width) -->
+                        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                     Text="🔧 Szervizek megtekintése"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToServicesCommand}"
                                     BackgroundColor="#FF9800"
@@ -83,31 +77,30 @@
                                     Margin="0,10,0,0"
                                     FontSize="14"/>
 
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 
-        <!-- Bottom Buttons -->
+    <!-- Bottom Buttons -->
         <Grid Grid.Row="2" 
-              ColumnDefinitions="*,*" 
-              ColumnSpacing="10"
-              Margin="0,10,0,0">
+                  ColumnDefinitions="*,*" 
+                  ColumnSpacing="10"
+                  Margin="0,10,0,0">
             <Button Grid.Column="0"
-                    Text="➕ Új autó" 
-                    Command="{Binding AddCarCommand}"
-                    BackgroundColor="#4CAF50"
-                    TextColor="White"/>
+                        Text="➕ Új autó" 
+                        Command="{Binding AddCarCommand}"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"/>
 
             <Button Grid.Column="1"
-                    Text="🔄 Frissítés" 
-                    Command="{Binding LoadCarsCommand}"
-                    BackgroundColor="#FF9800"
-                    TextColor="White"/>
+                        Text="🔄 Frissítés" 
+                        Command="{Binding LoadCarsCommand}"
+                        BackgroundColor="#FF9800"
+                        TextColor="White"/>
         </Grid>
 
-    </Grid>
     </Grid>
 
 </ContentPage>
