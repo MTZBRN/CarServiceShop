@@ -5,6 +5,13 @@
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
         <Button Text="Autók listája" Command="{Binding OpenCarListCommand  }" />
+        <Button Text="Munkalap nyomtatása (PDF)"
+            BackgroundColor="#9575CD"
+            TextColor="White"
+            FontAttributes="Bold"
+            CornerRadius="12"
+            HorizontalOptions="Center"
+            Command="{Binding GoToWorksheetPageCommand}" />
     </StackLayout>
             
 </ContentPage>

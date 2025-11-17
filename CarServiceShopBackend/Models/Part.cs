@@ -1,40 +1,26 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
-namespace CarServiceShopBackend.Models;
-
-public class Part
+namespace CarServiceShopBackend.Models
 {
-    [Key]
-    public int Id { get; set; }
-
-    [Required]
-    public string PartNumber { get; set; } // Pl.: "123-ABC"
-    [Required]
-    public string Name { get; set; } // Pl.: "Stabilizátor"
-    public double Price { get; set; } // Pl.: 1500.00
-    public int Quantity { get; set; } // Pl.: 2
-    
-    public string Description { get; set; } // Pl.: "Stabilizátor pálca"
-
-    [ForeignKey("Service")]
-    public int ServiceId { get; set; }
-    
-    public virtual Service? Service { get; set; }
-
-    public Part(int id, string partNumber, string name, double price, int quantity, string description, int serviceId)
+    public class Part
     {
-        Id = id;
-        PartNumber = partNumber;
-        Name = name;
-        Price = price;
-        Quantity = quantity;
-        Description = description;
-        ServiceId = serviceId;
-    }
-    public Part()
-    {
-        
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string PartNumber { get; set; }
+
+        // Nettó ár tárolása
+        public decimal NetPrice { get; set; }
+        public int Quantity { get; set; }
+        public int ServiceId { get; set; }
+
+        [NotMapped]
+        public decimal VATRate { get; set; } = 0.27m; // ÁFA 27%
+
+        // Bruttó ár kiszámolása nem tárolva az adatbázisban
+        [NotMapped]
+        public decimal GrossPrice => NetPrice * (1 + VATRate);
+
+        public Service Service { get; set; }
     }
 }

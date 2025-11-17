@@ -34,6 +34,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ServiceDetailViewModel>();
         builder.Services.AddTransient<PartListPageViewModel>();
         builder.Services.AddTransient<PartDetailViewModel>();
+        builder.Services.AddTransient<WorksheetViewModel>();
+
 
         // Pages
         builder.Services.AddTransient<CarListPage>();
@@ -42,6 +44,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ServiceDetailPage>();
         builder.Services.AddTransient<PartListPage>();
         builder.Services.AddTransient<PartDetailPage>();
+        builder.Services.AddTransient<WorksheetPage>();
 
 
 #if DEBUG

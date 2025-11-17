@@ -271,7 +271,7 @@ namespace CarServiceShopMAUI.Services
                 Debug.WriteLine($"🔍 ServiceId: {newPart.ServiceId}");
                 Debug.WriteLine($"🔍 PartNumber: {newPart.PartNumber}");
                 Debug.WriteLine($"🔍 Name: {newPart.Name}");
-                Debug.WriteLine($"🔍 Price: {newPart.Price}");
+                Debug.WriteLine($"🔍 Price: {newPart.NetPrice}");
                 Debug.WriteLine($"🔍 Quantity: {newPart.Quantity}");
                 Debug.WriteLine($"🔍 Description: {newPart.Description}");
                 Debug.WriteLine($"🔍 Base URL: {_httpClient.BaseAddress}");

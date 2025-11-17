@@ -2,7 +2,9 @@
 using CarServiceShopMAUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CarServiceShopMAUI.ViewModels
 {
@@ -31,6 +33,22 @@ namespace CarServiceShopMAUI.ViewModels
 
         [ObservableProperty]
         private DateTime dateOfTechnicalInspection = DateTime.Now.AddYears(1);
+
+        // Új mezők
+        [ObservableProperty]
+        private string ownerName = string.Empty;
+
+        [ObservableProperty]
+        private string ownerAddress = string.Empty;
+
+        [ObservableProperty]
+        private string ownerPhone = string.Empty;
+
+        [ObservableProperty]
+        private string vin = string.Empty;
+
+        [ObservableProperty]
+        private int mileage;
 
         [ObservableProperty]
         private bool isEdit;
@@ -76,6 +94,12 @@ namespace CarServiceShopMAUI.ViewModels
                     YearOfManufacture = car.YearOfManufacture;
                     DateOfTechnicalInspection = car.DateOfTechnicalInspection;
 
+                    OwnerName = car.OwnerName ?? string.Empty;
+                    OwnerAddress = car.OwnerAddress ?? string.Empty;
+                    OwnerPhone = car.OwnerPhone ?? string.Empty;
+                    Vin = car.Vin ?? string.Empty;
+                    Mileage = car.Mileage;
+
                     Debug.WriteLine($"✅ Car loaded: {car.LicensePlate}");
                 }
             }
@@ -115,7 +139,12 @@ namespace CarServiceShopMAUI.ViewModels
                     Brand = Brand.Trim(),
                     Model = Model.Trim(),
                     YearOfManufacture = YearOfManufacture,
-                    DateOfTechnicalInspection = DateOfTechnicalInspection
+                    DateOfTechnicalInspection = DateOfTechnicalInspection,
+                    OwnerName = OwnerName.Trim(),
+                    OwnerAddress = OwnerAddress.Trim(),
+                    OwnerPhone = OwnerPhone.Trim(),
+                    Vin = Vin.Trim(),
+                    Mileage = Mileage
                 };
 
                 bool success;

@@ -14,22 +14,33 @@ public class Car
     [Required]
     public string Model { get; set; }
     public int YearOfManufacture { get; set; }
+    public int Mileage { get; set; }
+    public string Vin { get; set; }
+    public string OwnerName { get; set; }
+    public string OwnerAddress { get; set; }
+    public string OwnerPhone { get; set; }
+
+
+
     public DateTime DateOfTechnicalInspection { get; set; }
     [NotMapped]
     public ICollection<Service> ServiceJobs { get; set; }
-
-    public Car(int carId, string licensePlate, string brand, string model, int yearOfManufacture,DateTime DateOfTechnicalInspection, ICollection<Service> services)
+    
+    public Car()
     {
-        Id = carId;
+    }
+
+    public Car(int id, string licensePlate, string brand, string model, int yearOfManufacture, int mileage, string vin, string ownerName, string ownerAddress, string ownerPhone)
+    {
+        Id = id;
         LicensePlate = licensePlate;
         Brand = brand;
         Model = model;
         YearOfManufacture = yearOfManufacture;
-        this.DateOfTechnicalInspection = DateOfTechnicalInspection;
-        ServiceJobs = services;
-    }
-    
-    public Car()
-    {
+        Mileage = mileage;
+        Vin = vin;
+        OwnerName = ownerName;
+        OwnerAddress = ownerAddress;
+        OwnerPhone = ownerPhone;
     }
 }

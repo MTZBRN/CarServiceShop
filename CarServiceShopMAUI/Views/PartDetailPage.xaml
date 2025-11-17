@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="CarServiceShopMAUI.Views.PartDetailPage"
              Title="{Binding PageTitle}"
              BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-    
+
     <ScrollView>
         <Grid RowDefinitions="*,Auto" Padding="20">
-            
+
             <!-- Main Content -->
             <VerticalStackLayout Grid.Row="0" Spacing="20">
-                
+
                 <!-- Header -->
                 <Frame BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
                        Padding="15" CornerRadius="10" HasShadow="True">
@@ -24,7 +25,7 @@
 
                 <!-- Form Fields -->
                 <VerticalStackLayout Spacing="15">
-                    
+
                     <!-- Cikkszám -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Cikkszám *" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
@@ -63,9 +64,9 @@
                         </Frame>
                     </VerticalStackLayout>
 
-                    <!-- Mennyiség és Ár egy sorban -->
+                    <!-- Mennyiség és Nettó ár egy sorban -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-                        
+
                         <!-- Mennyiség -->
                         <VerticalStackLayout Grid.Column="0" Spacing="5">
                             <Label Text="Mennyiség *" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
@@ -79,12 +80,12 @@
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- Ár -->
+                        <!-- Nettó ár -->
                         <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Egységár (Ft) *" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
+                            <Label Text="Nettó ár (Ft) *" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
                             <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#3D3D3D}" 
                                    Padding="0" CornerRadius="8" HasShadow="False" BorderColor="#DDD">
-                                <Entry Text="{Binding Price}" 
+                                <Entry Text="{Binding NetPrice}" 
                                        Keyboard="Numeric"
                                        Placeholder="0"
                                        BackgroundColor="Transparent"
@@ -93,13 +94,30 @@
                         </VerticalStackLayout>
                     </Grid>
 
+                    <!-- ÁFA kulcs -->
+                    <VerticalStackLayout Spacing="5" Margin="0,10,0,0">
+                        <Label Text="ÁFA kulcs" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
+                        <Entry Text="{Binding VATRate}"
+                               IsReadOnly="True"
+                               BackgroundColor="{AppThemeBinding Light=#eee, Dark=#666}"
+                               Margin="0,0,0,10"/>
+                    </VerticalStackLayout>
+
+                    <!-- Bruttó ár (számított, csak olvasható) -->
+                    <VerticalStackLayout Spacing="5" Margin="0,10,0,0">
+                        <Label Text="Bruttó ár (Ft)" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
+                        <Entry Text="{Binding GrossPrice, StringFormat='{0:N0}'}"
+                               IsReadOnly="True"
+                               BackgroundColor="{AppThemeBinding Light=#eee, Dark=#666}"/>
+                    </VerticalStackLayout>
+
                 </VerticalStackLayout>
 
             </VerticalStackLayout>
 
             <!-- Action Buttons -->
             <VerticalStackLayout Grid.Row="1" Spacing="10" Margin="0,20,0,10">
-                
+
                 <!-- Összesen kalkuláció -->
                 <Frame BackgroundColor="{AppThemeBinding Light=#E8F5E8, Dark=#1B4D1B}" 
                        Padding="15" CornerRadius="8" HasShadow="False">
@@ -110,7 +128,7 @@
                                TextColor="#2E7D32" VerticalOptions="Center"/>
                     </StackLayout>
                 </Frame>
-                
+
                 <!-- Gombok -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Button Grid.Column="0" 
@@ -121,7 +139,7 @@
                             FontAttributes="Bold"
                             CornerRadius="25"
                             HeightRequest="50"/>
-                    
+
                     <Button Grid.Column="1" 
                             Text="❌ Mégse" 
                             Command="{Binding CancelCommand}" 
@@ -131,10 +149,10 @@
                             CornerRadius="25"
                             HeightRequest="50"/>
                 </Grid>
-                
+
             </VerticalStackLayout>
 
         </Grid>
     </ScrollView>
-    
+
 </ContentPage>
