@@ -102,6 +102,13 @@
                                         FontSize="12"
                                         WidthRequest="50"
                                         Padding="5"/>
+                                <Button Text="Worksheet Export" 
+                                        Clicked="OnWorksheetButtonClicked"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#FF9800"
+                                        TextColor="White"
+                                        Margin="5"/>
+
                             </VerticalStackLayout>
                         </Grid>
                     </Frame>

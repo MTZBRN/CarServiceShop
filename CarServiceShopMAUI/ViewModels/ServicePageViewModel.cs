@@ -10,7 +10,6 @@ using System.Diagnostics;
 
 namespace CarServiceShopMAUI.ViewModels
 {
-    // Navigációs paraméter: CarId-t a hívó oldal adja át
     [QueryProperty(nameof(CarId), nameof(CarId))]
     [QueryProperty(nameof(Refresh), nameof(Refresh))]
     public partial class ServicePageViewModel : ObservableObject
@@ -45,6 +44,7 @@ namespace CarServiceShopMAUI.ViewModels
         public IAsyncRelayCommand DeleteServiceCommand { get; }
         public IAsyncRelayCommand<Service> ViewPartsCommand { get; }
         public IAsyncRelayCommand BackCommand { get; }
+        public IAsyncRelayCommand<Service> ExportWorksheetCommand { get; }
 
         public ServicePageViewModel(ApiService apiService)
         {
@@ -56,6 +56,8 @@ namespace CarServiceShopMAUI.ViewModels
             DeleteServiceCommand = new AsyncRelayCommand(DeleteServiceAsync, CanModifyService);
             ViewPartsCommand = new AsyncRelayCommand<Service>(ViewPartsAsync);
             BackCommand = new AsyncRelayCommand(BackAsync);
+            ExportWorksheetCommand = new AsyncRelayCommand<Service>(ExportWorksheetAsync);
+
 
             // Ha Service hozzáadás/szerkesztés után üzenetet kapunk, újratöltünk
             WeakReferenceMessenger.Default.Register<ServiceChangedMessage>(this, async (r, m) =>
@@ -241,6 +243,24 @@ namespace CarServiceShopMAUI.ViewModels
         {
             await Shell.Current.GoToAsync("..");
         }
+
+        private async Task ExportWorksheetAsync(Service service)
+        {
+            if (service == null) return;
+            try
+            {
+                Debug.WriteLine($"📄 Navigating to worksheet for service ID: {service.Id}");
+                var navParams = new Dictionary<string, object>
+                {
+                    { "ServiceId", service.Id }
+                };
+                await Shell.Current.GoToAsync(nameof(WorksheetPage), navParams);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Error navigating to worksheet: {ex.Message}");
+            }
+        }
     }
 
     // Messenger üzenet, ha szerviz változott (hozzáadás/szerkesztés/törlés)
@@ -248,4 +268,5 @@ namespace CarServiceShopMAUI.ViewModels
     {
         public ServiceChangedMessage(int carId) : base(carId) { }
     }
+
 }
