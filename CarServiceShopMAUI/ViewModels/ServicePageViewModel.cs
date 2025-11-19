@@ -3,15 +3,12 @@ using CarServiceShopMAUI.Services;
 using CarServiceShopMAUI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace CarServiceShopMAUI.ViewModels
 {
     [QueryProperty(nameof(CarId), nameof(CarId))]
-    [QueryProperty(nameof(Refresh), nameof(Refresh))]
     public partial class ServicePageViewModel : ObservableObject
     {
         private readonly ApiService _apiService;
@@ -31,20 +28,14 @@ namespace CarServiceShopMAUI.ViewModels
         [ObservableProperty]
         private ObservableCollection<Service> services = new();
 
-        [ObservableProperty]
-        private Service selectedService;
-
-        // Opcionális: ha navigációs paraméterből kapunk jelzést frissítésre
-        [ObservableProperty]
-        private bool refresh;
-
-        public IAsyncRelayCommand LoadServicesCommand { get; }
-        public IAsyncRelayCommand AddServiceCommand { get; }
-        public IAsyncRelayCommand EditServiceCommand { get; }
-        public IAsyncRelayCommand DeleteServiceCommand { get; }
+        // Új: row-parancsok minden gombhoz
+        public IAsyncRelayCommand<Service> EditServiceCommand { get; }
+        public IAsyncRelayCommand<Service> DeleteServiceCommand { get; }
         public IAsyncRelayCommand<Service> ViewPartsCommand { get; }
-        public IAsyncRelayCommand BackCommand { get; }
         public IAsyncRelayCommand<Service> ExportWorksheetCommand { get; }
+        public IAsyncRelayCommand AddServiceCommand { get; }
+        public IAsyncRelayCommand BackCommand { get; }
+        public IAsyncRelayCommand LoadServicesCommand { get; }
 
         public ServicePageViewModel(ApiService apiService)
         {
@@ -52,25 +43,13 @@ namespace CarServiceShopMAUI.ViewModels
 
             LoadServicesCommand = new AsyncRelayCommand(LoadServicesAsync);
             AddServiceCommand = new AsyncRelayCommand(AddServiceAsync);
-            EditServiceCommand = new AsyncRelayCommand(EditServiceAsync, CanModifyService);
-            DeleteServiceCommand = new AsyncRelayCommand(DeleteServiceAsync, CanModifyService);
+            EditServiceCommand = new AsyncRelayCommand<Service>(EditServiceAsync);
+            DeleteServiceCommand = new AsyncRelayCommand<Service>(DeleteServiceAsync);
             ViewPartsCommand = new AsyncRelayCommand<Service>(ViewPartsAsync);
-            BackCommand = new AsyncRelayCommand(BackAsync);
             ExportWorksheetCommand = new AsyncRelayCommand<Service>(ExportWorksheetAsync);
-
-
-            // Ha Service hozzáadás/szerkesztés után üzenetet kapunk, újratöltünk
-            WeakReferenceMessenger.Default.Register<ServiceChangedMessage>(this, async (r, m) =>
-            {
-                if (m.Value == CarId)
-                {
-                    Debug.WriteLine("🔁 ServiceChangedMessage received -> reloading services");
-                    await LoadServicesAsync();
-                }
-            });
+            BackCommand = new AsyncRelayCommand(BackAsync);
         }
 
-        // Ha a CarId megváltozik (navigáció), betöltjük az autó infót és a listát
         partial void OnCarIdChanged(int value)
         {
             if (value > 0)
@@ -78,27 +57,6 @@ namespace CarServiceShopMAUI.ViewModels
                 _ = LoadCarInfoAsync(value);
                 _ = LoadServicesAsync();
             }
-        }
-
-        // Ha a SelectedService változik, a gombok engedélyezése frissüljön
-        partial void OnSelectedServiceChanged(Service value)
-        {
-            EditServiceCommand.NotifyCanExecuteChanged();
-            DeleteServiceCommand.NotifyCanExecuteChanged();
-        }
-
-        // Opcionális: ha navigációs paraméterből kérünk frissítést
-        partial void OnRefreshChanged(bool value)
-        {
-            if (value)
-            {
-                _ = LoadServicesAsync();
-            }
-        }
-
-        private bool CanModifyService()
-        {
-            return SelectedService != null;
         }
 
         private async Task LoadCarInfoAsync(int carId)
@@ -132,7 +90,6 @@ namespace CarServiceShopMAUI.ViewModels
                 Services.Clear();
                 foreach (var s in servicesFromApi)
                 {
-                    // Ha szeretnél TotalCost-ot, itt számold
                     s.TotalPrice = s.WorkHours * s.WorkHourPrice;
                     Services.Add(s);
                 }
@@ -151,7 +108,6 @@ namespace CarServiceShopMAUI.ViewModels
         {
             try
             {
-                Debug.WriteLine($"➕ Navigating to add service for CarId: {CarId}");
                 var navParams = new Dictionary<string, object>
                 {
                     { "CarId", CarId }
@@ -164,16 +120,15 @@ namespace CarServiceShopMAUI.ViewModels
             }
         }
 
-        private async Task EditServiceAsync()
+        private async Task EditServiceAsync(Service service)
         {
-            if (SelectedService == null) return;
+            if (service == null) return;
 
             try
             {
-                Debug.WriteLine($"✏️ Navigating to edit service ID: {SelectedService.Id}");
                 var navParams = new Dictionary<string, object>
                 {
-                    { "ServiceId", SelectedService.Id },
+                    { "ServiceId", service.Id },
                     { "CarId", CarId }
                 };
                 await Shell.Current.GoToAsync(nameof(ServiceDetailPage), navParams);
@@ -184,13 +139,13 @@ namespace CarServiceShopMAUI.ViewModels
             }
         }
 
-        private async Task DeleteServiceAsync()
+        private async Task DeleteServiceAsync(Service service)
         {
-            if (SelectedService == null) return;
+            if (service == null) return;
 
             bool confirm = await Shell.Current.DisplayAlert(
                 "Megerősítés",
-                $"Biztosan törlöd ezt a szervizt?\n{SelectedService.ServiceDescription}",
+                $"Biztosan törlöd ezt a szervizt?\n{service.ServiceDescription}",
                 "Igen",
                 "Nem");
 
@@ -198,14 +153,12 @@ namespace CarServiceShopMAUI.ViewModels
 
             try
             {
-                Debug.WriteLine($"🗑️ Deleting service ID: {SelectedService.Id}");
-                bool success = await _apiService.DeleteServiceAsync(SelectedService.Id);
+                bool success = await _apiService.DeleteServiceAsync(service.Id);
 
                 if (success)
                 {
-                    Services.Remove(SelectedService);
+                    Services.Remove(service);
                     ServiceCount = Services.Count;
-                    SelectedService = null;
                     await Shell.Current.DisplayAlert("Siker", "Szerviz törölve!", "OK");
                 }
                 else
@@ -226,7 +179,6 @@ namespace CarServiceShopMAUI.ViewModels
 
             try
             {
-                Debug.WriteLine($"🔧 Navigating to parts for service ID: {service.Id}");
                 var navParams = new Dictionary<string, object>
                 {
                     { "ServiceId", service.Id }
@@ -239,17 +191,11 @@ namespace CarServiceShopMAUI.ViewModels
             }
         }
 
-        private async Task BackAsync()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
-
         private async Task ExportWorksheetAsync(Service service)
         {
             if (service == null) return;
             try
             {
-                Debug.WriteLine($"📄 Navigating to worksheet for service ID: {service.Id}");
                 var navParams = new Dictionary<string, object>
                 {
                     { "ServiceId", service.Id }
@@ -261,12 +207,10 @@ namespace CarServiceShopMAUI.ViewModels
                 Debug.WriteLine($"❌ Error navigating to worksheet: {ex.Message}");
             }
         }
-    }
 
-    // Messenger üzenet, ha szerviz változott (hozzáadás/szerkesztés/törlés)
-    public sealed class ServiceChangedMessage : ValueChangedMessage<int>
-    {
-        public ServiceChangedMessage(int carId) : base(carId) { }
+        private async Task BackAsync()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
     }
-
 }

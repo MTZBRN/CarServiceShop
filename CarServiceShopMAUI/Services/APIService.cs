@@ -68,35 +68,34 @@ namespace CarServiceShopMAUI.Services
             }
         }
 
-        public async Task<bool> AddCarAsync(Car newCar)
+        public async Task<bool> AddCarAsync(Car car)
         {
-            if (newCar == null) throw new ArgumentNullException(nameof(newCar));
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("car", newCar, _jsonOptions);
+                var response = await _httpClient.PostAsJsonAsync("car", car, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                LogError(nameof(AddCarAsync), ex);
+                Debug.WriteLine($"❌ AddCarAsync error: {ex.Message}");
                 return false;
             }
         }
 
-        public async Task<bool> UpdateCarAsync(Car updatedCar)
+        public async Task<bool> UpdateCarAsync(Car car)
         {
-            if (updatedCar == null) throw new ArgumentNullException(nameof(updatedCar));
             try
             {
-                var response = await _httpClient.PutAsJsonAsync($"car/{updatedCar.Id}", updatedCar, _jsonOptions);
+                var response = await _httpClient.PutAsJsonAsync($"car/{car.Id}", car, _jsonOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                LogError(nameof(UpdateCarAsync), ex);
+                Debug.WriteLine($"❌ UpdateCarAsync error: {ex.Message}");
                 return false;
             }
         }
+
 
         public async Task<bool> DeleteCarAsync(int id)
         {

@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CarServiceShopMAUI.Models;
+﻿using CarServiceShopMAUI.Models;
 using CarServiceShopMAUI.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
 namespace CarServiceShopMAUI.ViewModels
@@ -52,29 +53,34 @@ namespace CarServiceShopMAUI.ViewModels
             CalculateEstimatedCost();
             Debug.WriteLine($"🏗️ ServiceDetailViewModel created");
         }
-        partial void OnCarIdChanged(int value)
-        {
-            Debug.WriteLine($"📝 CarId changed to: {value}");
 
-            if (value > 0)
-            {
-                IsEdit = false;
-                PageTitle = "Új szerviz";
-            }
-        }
-
-
+        // ✅ KRITIKUS: ServiceId alapján állítsd be az IsEdit-et!
         partial void OnServiceIdChanged(int value)
         {
             Debug.WriteLine($"📝 ServiceId changed to: {value}");
 
             if (value > 0)
             {
+                // ✅ Van ID → Szerkesztés
                 IsEdit = true;
                 PageTitle = "Szerviz szerkesztése";
                 _ = LoadServiceAsync(value);
             }
             else
+            {
+                // ✅ Nincs ID (0) → Új szerviz
+                IsEdit = false;
+                PageTitle = "Új szerviz";
+            }
+        }
+
+        // ✅ CarId változásakor NE állítsd át az IsEdit-et!
+        partial void OnCarIdChanged(int value)
+        {
+            Debug.WriteLine($"📝 CarId changed to: {value}");
+
+            // Ha új szerviz (ServiceId == 0), akkor maradjon IsEdit = false
+            if (ServiceId == 0)
             {
                 IsEdit = false;
                 PageTitle = "Új szerviz";
@@ -111,7 +117,7 @@ namespace CarServiceShopMAUI.ViewModels
                     ServiceDate = service.ServiceDate;
                     CarId = service.CarId;
 
-                    Debug.WriteLine($"✅ Service loaded");
+                    Debug.WriteLine($"✅ Service loaded: ID={service.Id}");
                 }
             }
             catch (Exception ex)
@@ -124,12 +130,12 @@ namespace CarServiceShopMAUI.ViewModels
         {
             try
             {
-                Debug.WriteLine($"💾 Save started - CarId: {CarId}, ServiceId: {ServiceId}");
+                Debug.WriteLine($"💾 Save started - CarId: {CarId}, ServiceId: {ServiceId}, IsEdit: {IsEdit}");
 
                 if (CarId == 0)
                 {
                     Debug.WriteLine("❌ ERROR: CarId is 0!");
-                    await Shell.Current.DisplayAlert("Hiba", "Hiányzik az autó azonosító! Kérlek, térj vissza és próbáld újra.", "OK");
+                    await Shell.Current.DisplayAlert("Hiba", "Hiányzik az autó azonosító!", "OK");
                     return;
                 }
 
@@ -153,7 +159,7 @@ namespace CarServiceShopMAUI.ViewModels
 
                 var service = new Service
                 {
-                    Id = ServiceId,
+                    Id = ServiceId,  // ✅ Ha új: 0, ha szerkesztés: meglévő ID
                     CarId = CarId,
                     ServiceDescription = ServiceDescription.Trim(),
                     WorkHours = WorkHours,
@@ -161,22 +167,23 @@ namespace CarServiceShopMAUI.ViewModels
                     ServiceDate = ServiceDate
                 };
 
-                Debug.WriteLine($"📦 Service object created: CarId={service.CarId}, Description={service.ServiceDescription}");
+                Debug.WriteLine($"📦 Service object: Id={service.Id}, CarId={service.CarId}, IsEdit={IsEdit}");
 
                 bool success;
 
-                if (IsEdit)
+                // ✅ KRITIKUS: IsEdit ÉS ServiceId > 0 alapján!
+                if (IsEdit && ServiceId > 0)
                 {
-                    Debug.WriteLine($"✏️ Updating service ID: {service.Id}");
+                    Debug.WriteLine($"✏️ UPDATING service ID: {service.Id}");
                     success = await _apiService.UpdateServiceAsync(service);
                 }
                 else
                 {
-                    Debug.WriteLine($"➕ Adding new service to Car ID: {service.CarId}");
+                    Debug.WriteLine($"➕ ADDING new service to Car ID: {service.CarId}");
                     success = await _apiService.AddServiceAsync(service);
                 }
 
-                Debug.WriteLine($"🔍 API call result: {success}");
+                Debug.WriteLine($"🔍 API result: {success}");
 
                 if (success)
                 {
@@ -189,7 +196,7 @@ namespace CarServiceShopMAUI.ViewModels
                 else
                 {
                     Debug.WriteLine("❌ Save failed - API returned false");
-                    await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni! Ellenőrizd a backend kapcsolatot.", "OK");
+                    await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni!", "OK");
                 }
             }
             catch (Exception ex)

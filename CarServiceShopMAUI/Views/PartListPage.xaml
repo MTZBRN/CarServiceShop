@@ -2,44 +2,193 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarServiceShopMAUI.Views.PartListPage"
-             Title="{Binding PageTitle}">
+             Title="{Binding PageTitle}"
+             BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#1E1E1E}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Gomb stílusok -->
+            <Style x:Key="IconButton" TargetType="Button">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="WidthRequest" Value="40"/>
+                <Setter Property="HeightRequest" Value="40"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Margin" Value="2"/>
+            </Style>
+
+            <Style x:Key="EditButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+                <Setter Property="BackgroundColor" Value="#2196F3"/>
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+
+            <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+                <Setter Property="BackgroundColor" Value="#F44336"/>
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+
+            <!-- ✅ ÚJ: Copy gomb stílus -->
+            <Style x:Key="CopyButton" TargetType="Button">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="8,4"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="BackgroundColor" Value="#E0E0E0"/>
+                <Setter Property="TextColor" Value="#424242"/>
+                <Setter Property="Margin" Value="4,0,0,0"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid RowDefinitions="Auto,*,Auto" Padding="10">
+
+        <!-- Header - Info kártya -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{AppThemeBinding Light=#2196F3, Dark=#1976D2}"
+               Padding="15" 
+               CornerRadius="12" 
+               Margin="0,0,0,10"
+               HasShadow="True">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Label Grid.Column="0" 
+                       Text="🔩" 
+                       FontSize="24" 
+                       VerticalOptions="Center"
+                       Margin="0,0,10,0"/>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding PageTitle}" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="{Binding Parts.Count, StringFormat='Összesen: {0} alkatrész'}" 
+                           FontSize="12"
+                           TextColor="White"
+                           Opacity="0.9"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Lista -->
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Parts}"
-                        SelectedItem="{Binding SelectedPart}">
+                        SelectionMode="None">
             <CollectionView.EmptyView>
-                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                    <Label Text="🔩" FontSize="48" HorizontalOptions="Center"/>
-                    <Label Text="Nincsenek alkatrészek ehhez a szervizhez" TextColor="Gray" />
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                     VerticalOptions="Center"
+                                     Spacing="10">
+                    <Label Text="🔩" 
+                           FontSize="64" 
+                           HorizontalOptions="Center"
+                           Opacity="0.3"/>
+                    <Label Text="Még nincsenek alkatrészek" 
+                           FontSize="16"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Kattints az 'Új alkatrész' gombra a hozzáadáshoz" 
+                           FontSize="12"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"
+                           Opacity="0.7"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="12" Margin="5" BackgroundColor="LightGray" CornerRadius="10">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
-                                <Label Text="{Binding PartNumber}" FontSize="12" TextColor="Gray"/>
-                                <Label Text="{Binding Quantity, StringFormat='Mennyiség: {0}'}" FontSize="12"/>
-                                <Label Text="{Binding NetPrice, StringFormat='Ár: {0:N0} Ft'}" FontSize="12"/>
+                    <Frame Padding="16" 
+                           Margin="5,5,5,10" 
+                           BackgroundColor="{AppThemeBinding Light=White, Dark=#2D2D2D}"
+                           CornerRadius="16" 
+                           HasShadow="True">
+                        <Grid ColumnDefinitions="*,Auto" RowSpacing="8">
+
+                            <!-- Tartalom bal oldalon -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding Name}" 
+                                       FontAttributes="Bold" 
+                                       FontSize="18"
+                                       TextColor="{AppThemeBinding Light=#212121, Dark=White}"/>
+
+                                <!-- ✅ ÚJ: Cikkszám + Copy gomb egy sorban -->
+                                <HorizontalStackLayout Spacing="0">
+                                    <Label Text="{Binding PartNumber}" 
+                                           FontSize="13" 
+                                           TextColor="{AppThemeBinding Light=#757575, Dark=#BDBDBD}"
+                                           VerticalOptions="Center"/>
+                                    <Button Text="📋"
+                                            Style="{StaticResource CopyButton}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CopyPartNumberCommand}"
+                                            CommandParameter="{Binding .}"
+                                            ToolTipProperties.Text="Cikkszám másolása"
+                                            AutomationId="CopyPartNumberButton"/>
+                                </HorizontalStackLayout>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" 
+                                      ColumnSpacing="15"
+                                      Margin="0,6,0,0">
+                                    <HorizontalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="📦" FontSize="14"/>
+                                        <Label Text="{Binding Quantity, StringFormat='{0} db'}" 
+                                               FontSize="14"
+                                               TextColor="{AppThemeBinding Light=#616161, Dark=#E0E0E0}"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="4">
+                                        <Label Text="💰" FontSize="14"/>
+                                        <Label Text="{Binding NetPrice, StringFormat='{0:N0} Ft'}" 
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#1976D2, Dark=#64B5F6}"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
                             </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+
+                            <!-- Gombok jobb oldalon -->
+                            <VerticalStackLayout Grid.Column="1" 
+                                                 Spacing="8" 
+                                                 VerticalOptions="Center"
+                                                 Margin="10,0,0,0">
                                 <Button Text="✏️"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditPartCommand}"
-                                        FontSize="12" WidthRequest="50"/>
+                                        Style="{StaticResource EditButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditPartRowCommand}"
+                                        CommandParameter="{Binding .}"
+                                        AutomationId="EditPartButton"/>
+
                                 <Button Text="🗑️"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePartCommand}"
-                                        FontSize="12" WidthRequest="50" BackgroundColor="#F44336" TextColor="White"/>
+                                        Style="{StaticResource DeleteButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePartRowCommand}"
+                                        CommandParameter="{Binding .}"
+                                        AutomationId="DeletePartButton"/>
                             </VerticalStackLayout>
+
                         </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,10,0,0">
-            <Button Grid.Column="0" Text="➕ Új alkatrész" Command="{Binding AddPartCommand}" BackgroundColor="#4CAF50" TextColor="White"/>
-            <Button Grid.Column="1" Text="🔄 Frissítés" Command="{Binding LoadPartsCommand}" BackgroundColor="#FF9800" TextColor="White"/>
+        <!-- Alsó gombok -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*" 
+              ColumnSpacing="10"
+              Margin="0,10,0,0">
+            <Button Grid.Column="0" 
+                    Text="➕ Új alkatrész" 
+                    Command="{Binding AddPartCommand}" 
+                    BackgroundColor="#4CAF50" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="50"/>
+
+            <Button Grid.Column="1" 
+                    Text="🔄 Frissítés" 
+                    Command="{Binding LoadPartsCommand}" 
+                    BackgroundColor="#FF9800" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="50"/>
         </Grid>
+
     </Grid>
+
 </ContentPage>

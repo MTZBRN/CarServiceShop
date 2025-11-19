@@ -1,4 +1,4 @@
-using CarServiceShopMAUI.Models;
+﻿using CarServiceShopMAUI.Models;
 using CarServiceShopMAUI.Services;
 using CarServiceShopMAUI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace CarServiceShopMAUI.ViewModels
 {
-    public partial class CarListViewModel : ObservableObject
+    public partial class CarListPageViewModel : ObservableObject
     {
         private readonly ApiService _apiService;
 
@@ -27,7 +27,7 @@ namespace CarServiceShopMAUI.ViewModels
         public IAsyncRelayCommand<Car> ViewServicesCommand { get; }
         public IAsyncRelayCommand<Car> CopyLicensePlateCommand { get; }
 
-        public CarListViewModel(ApiService apiService)
+        public CarListPageViewModel(ApiService apiService)
         {
             _apiService = apiService;
 

@@ -34,4 +34,7 @@ public class Car
 
     [JsonPropertyName("mileage")]
     public int Mileage { get; set; }
+
+    [JsonPropertyName("imageData")]
+    public byte[] ImageData { get; set; }
 }
