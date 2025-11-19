@@ -21,6 +21,6 @@ namespace CarServiceShopBackend.Models
         [NotMapped]
         public decimal GrossPrice => NetPrice * (1 + VATRate);
 
-        public Service Service { get; set; }
+        public Service? Service { get; set; }
     }
 }

@@ -95,6 +95,7 @@ namespace CarServiceShopMAUI.ViewModels
                     Quantity = part.Quantity;
                     NetPrice = part.NetPrice;
                     VatRate = part.VATRate;
+                    ServiceId = part.ServiceId;
 
                     Debug.WriteLine($"✅ Alkatrész betöltve: {part.Name}");
                 }
@@ -109,6 +110,17 @@ namespace CarServiceShopMAUI.ViewModels
         {
             try
             {
+                Debug.WriteLine($"💾 Save started - ServiceId: {ServiceId}, PartId: {PartId}");
+
+                if (ServiceId == 0)
+                {
+                    Debug.WriteLine("❌ ERROR: ServiceId is 0!");
+                    await Shell.Current.DisplayAlert("Hiba",
+                        "Hiányzik a szerviz azonosító! Kérlek, térj vissza és próbáld újra.",
+                        "OK");
+                    return;
+                }
+
                 if (string.IsNullOrWhiteSpace(PartNumber))
                 {
                     await Shell.Current.DisplayAlert("Hiba", "A cikkszám megadása kötelező!", "OK");
@@ -136,23 +148,28 @@ namespace CarServiceShopMAUI.ViewModels
                 var part = new Part
                 {
                     Id = PartId,
+                    ServiceId = ServiceId,
                     PartNumber = PartNumber.Trim(),
                     Name = Name.Trim(),
-                    Description = Description.Trim(),
+                    Description = Description?.Trim() ?? string.Empty,
                     Quantity = Quantity,
                     NetPrice = NetPrice,
                     VATRate = VatRate,
-                    ServiceId = ServiceId,
+                    GrossPrice = GrossPrice,
                     Service = new Service {Id = ServiceId }
-
                 };
+
+                Debug.WriteLine($"📦 Part object: ServiceId={part.ServiceId}, Name={part.Name}, NetPrice={part.NetPrice}");
 
                 bool success = IsEdit
                     ? await _apiService.UpdatePartAsync(part)
                     : await _apiService.AddPartAsync(part);
 
+                Debug.WriteLine($"🔍 API result: {success}");
+
                 if (success)
                 {
+                    Debug.WriteLine("✅ Save successful!");
                     await Shell.Current.DisplayAlert("Siker",
                         IsEdit ? "Alkatrész módosítva!" : "Alkatrész hozzáadva!",
                         "OK");
@@ -160,15 +177,30 @@ namespace CarServiceShopMAUI.ViewModels
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni!", "OK");
+                    Debug.WriteLine("❌ Save failed - API returned false");
+                    await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni! Ellenőrizd a backend kapcsolatot.", "OK");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ Mentési hiba: {ex.Message}");
+                Debug.WriteLine($"❌ EXCEPTION in SaveAsync: {ex}");
+                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 await Shell.Current.DisplayAlert("Hiba", $"Hiba történt: {ex.Message}", "OK");
             }
         }
+
+
+        partial void OnServiceIdChanged(int value)
+        {
+            Debug.WriteLine($"📝 ServiceId changed to: {value}");
+
+            if (value > 0 && PartId == 0)
+            {
+                IsEdit = false;
+                PageTitle = "Új alkatrész";
+            }
+        }
+
 
         private async Task CancelAsync()
         {
