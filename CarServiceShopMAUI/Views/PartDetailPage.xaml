@@ -97,7 +97,7 @@
                     <!-- ÁFA kulcs -->
                     <VerticalStackLayout Spacing="5" Margin="0,10,0,0">
                         <Label Text="ÁFA kulcs" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
-                        <Entry Text="{Binding VATRate}"
+                        <Entry Text="{Binding VatRate}"
                                IsReadOnly="True"
                                BackgroundColor="{AppThemeBinding Light=#eee, Dark=#666}"
                                Margin="0,0,0,10"/>
@@ -106,9 +106,9 @@
                     <!-- Bruttó ár (számított, csak olvasható) -->
                     <VerticalStackLayout Spacing="5" Margin="0,10,0,0">
                         <Label Text="Bruttó ár (Ft)" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#333, Dark=#CCC}"/>
-                        <Entry Text="{Binding GrossPrice, StringFormat='{0:N0}'}"
-                               IsReadOnly="True"
-                               BackgroundColor="{AppThemeBinding Light=#eee, Dark=#666}"/>
+                        <Label Text="{Binding GrossPrice, StringFormat='{0:N0} Ft'}"
+                               BackgroundColor="{AppThemeBinding Light=#eee, Dark=#666}" />
+
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>

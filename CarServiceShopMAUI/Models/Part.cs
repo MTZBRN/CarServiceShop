@@ -34,6 +34,6 @@ namespace CarServiceShopMAUI.Models
 
 
         [JsonIgnore]
-        public string Service { get; set; }
+        public Service Service { get; set; }
     }
 }

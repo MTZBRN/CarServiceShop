@@ -10,6 +10,8 @@ using static Microsoft.Maui.ApplicationModel.Permissions;
 namespace CarServiceShopMAUI.ViewModels
 {
     [QueryProperty(nameof(PartId), nameof(PartId))]
+    [QueryProperty(nameof(ServiceId), nameof(ServiceId))]
+
     public partial class PartDetailViewModel : ObservableObject
     {
         private readonly ApiService _apiService;
@@ -38,10 +40,20 @@ namespace CarServiceShopMAUI.ViewModels
         [ObservableProperty]
         private decimal vatRate = 0.27m;
 
+        [ObservableProperty]
+        private int serviceId;
+
         public decimal GrossPrice => NetPrice * (1 + VatRate);
+
+        public decimal TotalPrice => GrossPrice * Quantity;
 
         [ObservableProperty]
         private bool isEdit;
+
+        partial void OnQuantityChanged(int value) { OnPropertyChanged(nameof(TotalPrice)); }
+        partial void OnNetPriceChanged(decimal value) { OnPropertyChanged(nameof(GrossPrice)); OnPropertyChanged(nameof(TotalPrice)); }
+        partial void OnVatRateChanged(decimal value) { OnPropertyChanged(nameof(GrossPrice)); OnPropertyChanged(nameof(TotalPrice)); }
+
 
         public IAsyncRelayCommand SaveCommand { get; }
         public IAsyncRelayCommand CancelCommand { get; }
@@ -129,7 +141,10 @@ namespace CarServiceShopMAUI.ViewModels
                     Description = Description.Trim(),
                     Quantity = Quantity,
                     NetPrice = NetPrice,
-                    VATRate = VatRate
+                    VATRate = VatRate,
+                    ServiceId = ServiceId,
+                    Service = new Service {Id = ServiceId }
+
                 };
 
                 bool success = IsEdit

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+b7ff32ceb1bab355e5f8e6f26bf6227c818d205c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+313507629dbbf099e92103e43c489ed6cc4fdfc8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CarServiceShopMAUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
