@@ -70,16 +70,8 @@ namespace CarServiceShopMAUI.Services
 
         public async Task<bool> AddCarAsync(Car car)
         {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync("car", car, _jsonOptions);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"❌ AddCarAsync error: {ex.Message}");
-                return false;
-            }
+            var response = await _httpClient.PostAsJsonAsync("car", car, _jsonOptions);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> UpdateCarAsync(Car car)
@@ -87,14 +79,23 @@ namespace CarServiceShopMAUI.Services
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"car/{car.Id}", car, _jsonOptions);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"❌ ERROR {response.StatusCode}: {errorBody}");
+                }
+
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ UpdateCarAsync error: {ex.Message}");
+                Debug.WriteLine($"❌ Exception: {ex.Message}");
                 return false;
             }
         }
+
+
 
 
         public async Task<bool> DeleteCarAsync(int id)

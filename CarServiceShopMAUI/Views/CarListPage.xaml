@@ -5,29 +5,7 @@
              Title="Autók"
              BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#1E1E1E}">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="IconButton" TargetType="Button">
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="WidthRequest" Value="40"/>
-                <Setter Property="HeightRequest" Value="40"/>
-                <Setter Property="CornerRadius" Value="20"/>
-                <Setter Property="Margin" Value="2"/>
-            </Style>
-
-            <Style x:Key="CopyButton" TargetType="Button">
-                <Setter Property="FontSize" Value="12"/>
-                <Setter Property="Padding" Value="8,4"/>
-                <Setter Property="CornerRadius" Value="12"/>
-                <Setter Property="BackgroundColor" Value="#E0E0E0"/>
-                <Setter Property="TextColor" Value="#424242"/>
-                <Setter Property="Margin" Value="4,0,0,0"/>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
-    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="10">
 
         <!-- Header -->
         <Frame Grid.Row="0" 
@@ -47,7 +25,7 @@
                            FontSize="18" 
                            FontAttributes="Bold"
                            TextColor="White"/>
-                    <Label Text="{Binding Cars.Count, StringFormat='Összesen: {0} autó'}" 
+                    <Label Text="{Binding Cars.Count, StringFormat='Megjelenítve: {0} autó'}" 
                            FontSize="12"
                            TextColor="White"
                            Opacity="0.9"/>
@@ -55,8 +33,22 @@
             </Grid>
         </Frame>
 
+        <!-- ✅ Keresőmező -->
+        <Frame Grid.Row="1"
+               BackgroundColor="{AppThemeBinding Light=White, Dark=#2D2D2D}"
+               CornerRadius="12"
+               Padding="10"
+               Margin="0,0,0,10"
+               HasShadow="True">
+            <SearchBar Text="{Binding SearchText}"
+                       Placeholder="Keresés (márka, modell, rendszám, tulajdonos)..."
+                       PlaceholderColor="Gray"
+                       CancelButtonColor="{AppThemeBinding Light=#2196F3, Dark=#64B5F6}"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+        </Frame>
+
         <!-- Lista -->
-        <CollectionView Grid.Row="1"
+        <CollectionView Grid.Row="2"
                         ItemsSource="{Binding Cars}"
                         SelectionMode="None">
             <CollectionView.EmptyView>
@@ -67,11 +59,11 @@
                            FontSize="64" 
                            HorizontalOptions="Center"
                            Opacity="0.3"/>
-                    <Label Text="Még nincsenek autók" 
+                    <Label Text="Nincs találat" 
                            FontSize="16"
                            TextColor="Gray"
                            HorizontalOptions="Center"/>
-                    <Label Text="Kattints az 'Új autó' gombra a hozzáadáshoz" 
+                    <Label Text="Próbálj más keresési kifejezést!" 
                            FontSize="12"
                            TextColor="Gray"
                            HorizontalOptions="Center"
@@ -88,7 +80,6 @@
                            HasShadow="True">
                         <Grid ColumnDefinitions="*,Auto" RowSpacing="8">
 
-                            <!-- Tartalom -->
                             <VerticalStackLayout Grid.Column="0" Spacing="4">
                                 <Label Text="{Binding Brand}" 
                                        FontAttributes="Bold" 
@@ -99,7 +90,6 @@
                                        FontSize="16"
                                        TextColor="{AppThemeBinding Light=#424242, Dark=#E0E0E0}"/>
 
-                                <!-- Rendszám + Copy gomb -->
                                 <HorizontalStackLayout Spacing="0" Margin="0,4,0,0">
                                     <Label Text="{Binding LicensePlate}" 
                                            FontSize="14" 
@@ -107,45 +97,57 @@
                                            TextColor="{AppThemeBinding Light=#1976D2, Dark=#64B5F6}"
                                            VerticalOptions="Center"/>
                                     <Button Text="📋"
-                                            Style="{StaticResource CopyButton}"
+                                            FontSize="12"
+                                            Padding="8,4"
+                                            CornerRadius="12"
+                                            BackgroundColor="#E0E0E0"
+                                            TextColor="#424242"
+                                            Margin="4,0,0,0"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CopyLicensePlateCommand}"
-                                            CommandParameter="{Binding .}"
-                                            ToolTipProperties.Text="Rendszám másolása"/>
+                                            CommandParameter="{Binding .}"/>
                                 </HorizontalStackLayout>
 
-                                <Label Text="{Binding Year, StringFormat='Évjárat: {0}'}" 
+                                <Label Text="{Binding YearOfManufacture, StringFormat='Évjárat: {0}'}" 
                                        FontSize="13"
                                        TextColor="{AppThemeBinding Light=#616161, Dark=#BDBDBD}"/>
                             </VerticalStackLayout>
 
-                            <!-- Gombok -->
                             <VerticalStackLayout Grid.Column="1" 
                                                  Spacing="8" 
                                                  VerticalOptions="Center"
                                                  Margin="10,0,0,0">
                                 <Button Text="🔧"
-                                        Style="{StaticResource IconButton}"
+                                        FontSize="16"
+                                        Padding="0"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        CornerRadius="20"
                                         BackgroundColor="#FF9800"
                                         TextColor="White"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewServicesCommand}"
-                                        CommandParameter="{Binding .}"
-                                        ToolTipProperties.Text="Szervizek"/>
+                                        CommandParameter="{Binding .}"/>
 
                                 <Button Text="✏️"
-                                        Style="{StaticResource IconButton}"
+                                        FontSize="16"
+                                        Padding="0"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        CornerRadius="20"
                                         BackgroundColor="#2196F3"
                                         TextColor="White"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCarCommand}"
-                                        CommandParameter="{Binding .}"
-                                        ToolTipProperties.Text="Szerkesztés"/>
+                                        CommandParameter="{Binding .}"/>
 
                                 <Button Text="🗑️"
-                                        Style="{StaticResource IconButton}"
+                                        FontSize="16"
+                                        Padding="0"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        CornerRadius="20"
                                         BackgroundColor="#F44336"
                                         TextColor="White"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCarCommand}"
-                                        CommandParameter="{Binding .}"
-                                        ToolTipProperties.Text="Törlés"/>
+                                        CommandParameter="{Binding .}"/>
                             </VerticalStackLayout>
 
                         </Grid>
@@ -155,7 +157,7 @@
         </CollectionView>
 
         <!-- Alsó gombok -->
-        <Grid Grid.Row="2" 
+        <Grid Grid.Row="3" 
               ColumnDefinitions="*,*" 
               ColumnSpacing="10"
               Margin="0,10,0,0">

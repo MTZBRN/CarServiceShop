@@ -1,3 +1,4 @@
+using CarServiceShopMAUI.Models;
 using System.Text.Json.Serialization;
 
 public class Car
@@ -35,6 +36,9 @@ public class Car
     [JsonPropertyName("mileage")]
     public int Mileage { get; set; }
 
-    [JsonPropertyName("imageData")]
-    public byte[] ImageData { get; set; }
+    [JsonPropertyName("picture")]
+    public byte[]? ImageData { get; set; } = null;
+
+    [JsonPropertyName("ServiceJobs")]
+    public List<Service>? ServiceJobs { get; set; }
 }

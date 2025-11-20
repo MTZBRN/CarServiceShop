@@ -1,72 +1,95 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="CarServiceShopMAUI.Views.CarDetailPage"
-             Title="{Binding PageTitle}"
-             Shell.NavBarIsVisible="False">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="CarServiceShopMAUI.Views.CarDetailPage"
+    Title="{Binding PageTitle}"
+    Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Padding="18" Spacing="18">
 
+            <!-- Kép előnézet -->
+            <Frame BackgroundColor="{AppThemeBinding Light=#FAFAFA, Dark=#333}" HeightRequest="200" CornerRadius="14" HasShadow="True">
+                <Grid>
+                    <Image 
+                        Source="{Binding ImageSource}"   
+                        Aspect="AspectFill"
+                        IsVisible="{Binding HasImage}"/>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding HasImage, Converter={StaticResource InvertedBoolConverter}}">
+                            <Label Text="📷" FontSize="52" HorizontalOptions="Center" Opacity="0.2"/>
+                            <Label Text="Nincs kép" FontSize="13" TextColor="Gray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Kép gombok -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" 
+                    Text="📸 Fényképezés"
+                    Command="{Binding TakePhotoCommand}" 
+                    BackgroundColor="#2196F3" 
+                    TextColor="White" 
+                    CornerRadius="8"/>
+                <Button Grid.Column="1" 
+                    Text="🖼️ Gallériából"
+                    Command="{Binding PickImageCommand}" 
+                    BackgroundColor="#009688" 
+                    TextColor="White"
+                    CornerRadius="8"/>
+            </Grid>
+            <Button 
+                Text="🗑️ Kép törlése"
+                Command="{Binding RemoveImageCommand}"
+                BackgroundColor="#F44336"
+                TextColor="White"
+                CornerRadius="8"
+                IsEnabled="{Binding HasImage}" />
+
+            <!-- Autó adatok -->
             <Label Text="Rendszám" FontAttributes="Bold"/>
-            <Entry Text="{Binding LicensePlate}" 
-                   Placeholder="pl. ABC-123"
-                   MaxLength="10"/>
+            <Entry Text="{Binding LicensePlate}" Placeholder="pl. ABC-123" MaxLength="10"/>
 
             <Label Text="Márka" FontAttributes="Bold"/>
-            <Entry Text="{Binding Brand}" 
-                   Placeholder="pl. Toyota"/>
+            <Entry Text="{Binding Brand}" Placeholder="pl. Toyota"/>
 
             <Label Text="Modell" FontAttributes="Bold"/>
-            <Entry Text="{Binding Model}" 
-                   Placeholder="pl. Corolla"/>
+            <Entry Text="{Binding Model}" Placeholder="pl. Corolla"/>
 
             <Label Text="Gyártási év" FontAttributes="Bold"/>
-            <Entry Text="{Binding YearOfManufacture}" 
-                   Placeholder="pl. 2020"
-                   Keyboard="Numeric"/>
+            <Entry Text="{Binding YearOfManufacture}" Placeholder="pl. 2020" Keyboard="Numeric"/>
 
             <Label Text="Műszaki vizsga lejárata" FontAttributes="Bold"/>
-            <DatePicker Date="{Binding DateOfTechnicalInspection}"
-                        MinimumDate="01/01/2020"
-                        MaximumDate="12/31/2030"/>
+            <DatePicker Date="{Binding DateOfTechnicalInspection}" MinimumDate="2020-01-01" MaximumDate="2030-12-31"/>
 
             <Label Text="Tulajdonos neve" FontAttributes="Bold"/>
-            <Entry Text="{Binding OwnerName}" 
-                   Placeholder="pl. Kovács János"/>
+            <Entry Text="{Binding OwnerName}" Placeholder="pl. Kovács János"/>
 
             <Label Text="Tulajdonos címe" FontAttributes="Bold"/>
-            <Entry Text="{Binding OwnerAddress}" 
-                   Placeholder="pl. Budapest, Kossuth Lajos u. 23."/>
+            <Entry Text="{Binding OwnerAddress}" Placeholder="pl. Budapest, Kossuth Lajos u. 23."/>
 
             <Label Text="Tulajdonos telefonszáma" FontAttributes="Bold"/>
-            <Entry Text="{Binding OwnerPhone}" 
-                   Placeholder="pl. +36 30 123 4567"
-                   Keyboard="Telephone"/>
+            <Entry Text="{Binding OwnerPhone}" Placeholder="pl. +36 30 123 4567" Keyboard="Telephone"/>
 
             <Label Text="Alvázszám (VIN)" FontAttributes="Bold"/>
-            <Entry Text="{Binding Vin}" 
-                   Placeholder="pl. 1HGBH41JXMN109186"
-                   MaxLength="17"/>
+            <Entry Text="{Binding Vin}" Placeholder="pl. 1HGBH41JXMN109186" MaxLength="17"/>
 
             <Label Text="Km óra állás" FontAttributes="Bold"/>
-            <Entry Text="{Binding Mileage}" 
-                   Placeholder="pl. 105000"
-                   Keyboard="Numeric"/>
+            <Entry Text="{Binding Mileage}" Placeholder="pl. 105000" Keyboard="Numeric"/>
 
-            <Button Text="Mentés" 
-                    Command="{Binding SaveCommand}"
-                    BackgroundColor="#4CAF50"
-                    TextColor="White"
-                    Margin="0,20,0,0"/>
+            <Button 
+                Text="Mentés" 
+                Command="{Binding SaveCommand}"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                Margin="0,20,0,0"/>
 
-            <Button Text="Mégse" 
-                    Command="{Binding CancelCommand}"
-                    BackgroundColor="#F44336"
-                    TextColor="White"/>
+            <Button 
+                Text="Mégse" 
+                Command="{Binding CancelCommand}"
+                BackgroundColor="#F44336"
+                TextColor="White"/>
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

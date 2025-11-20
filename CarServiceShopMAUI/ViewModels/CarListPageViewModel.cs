@@ -6,12 +6,12 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-
 namespace CarServiceShopMAUI.ViewModels
 {
     public partial class CarListPageViewModel : ObservableObject
     {
         private readonly ApiService _apiService;
+        private List<Car> _allCars = new();  // ✅ Összes autó
 
         [ObservableProperty]
         private ObservableCollection<Car> cars = new();
@@ -19,7 +19,6 @@ namespace CarServiceShopMAUI.ViewModels
         [ObservableProperty]
         private string searchText = string.Empty;
 
-        // Row-alapú parancsok
         public IAsyncRelayCommand LoadCarsCommand { get; }
         public IAsyncRelayCommand AddCarCommand { get; }
         public IAsyncRelayCommand<Car> EditCarCommand { get; }
@@ -41,6 +40,12 @@ namespace CarServiceShopMAUI.ViewModels
             _ = LoadCarsAsync();
         }
 
+        // ✅ Szűrés amikor a keresőmező változik
+        partial void OnSearchTextChanged(string value)
+        {
+            FilterCars();
+        }
+
         public async Task LoadCarsAsync()
         {
             try
@@ -48,18 +53,49 @@ namespace CarServiceShopMAUI.ViewModels
                 Debug.WriteLine("🔄 Loading cars...");
                 var carList = await _apiService.GetCarsAsync();
 
-                Cars.Clear();
-                foreach (var car in carList)
-                {
-                    Cars.Add(car);
-                }
+                _allCars = carList.ToList();  // ✅ Mentjük az összes autót
+                FilterCars();  // ✅ Szűrés alkalmazása
 
-                Debug.WriteLine($"✅ Loaded {Cars.Count} cars");
+                Debug.WriteLine($"✅ Loaded {_allCars.Count} cars");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"❌ Error loading cars: {ex.Message}");
                 await Shell.Current.DisplayAlert("Hiba", "Nem sikerült betölteni az autókat!", "OK");
+            }
+        }
+
+        // ✅ Szűrés logika
+        private void FilterCars()
+        {
+            Debug.WriteLine($"🔍 Filtering with: '{SearchText}'");
+
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                // Nincs szűrés, mutasd az összeset
+                Cars.Clear();
+                foreach (var car in _allCars)
+                {
+                    Cars.Add(car);
+                }
+            }
+            else
+            {
+                var searchLower = SearchText.ToLower();
+                var filtered = _allCars.Where(c =>
+                    c.Brand.ToLower().Contains(searchLower) ||
+                    c.Model.ToLower().Contains(searchLower) ||
+                    c.LicensePlate.ToLower().Contains(searchLower) ||
+                    c.OwnerName?.ToLower().Contains(searchLower) == true
+                ).ToList();
+
+                Cars.Clear();
+                foreach (var car in filtered)
+                {
+                    Cars.Add(car);
+                }
+
+                Debug.WriteLine($"✅ Filtered to {Cars.Count} cars");
             }
         }
 
@@ -78,15 +114,11 @@ namespace CarServiceShopMAUI.ViewModels
 
         private async Task EditCarAsync(Car car)
         {
-            if (car == null)
-            {
-                Debug.WriteLine("⚠️ EditCarAsync: car is null");
-                return;
-            }
+            if (car == null) return;
 
             try
             {
-                Debug.WriteLine($"✏️ Editing car: {car.Brand} {car.Model} ({car.LicensePlate})");
+                Debug.WriteLine($"✏️ Editing car: {car.Brand} {car.Model}");
                 var navParams = new Dictionary<string, object>
                 {
                     { "CarId", car.Id }
@@ -101,11 +133,7 @@ namespace CarServiceShopMAUI.ViewModels
 
         private async Task DeleteCarAsync(Car car)
         {
-            if (car == null)
-            {
-                Debug.WriteLine("⚠️ DeleteCarAsync: car is null");
-                return;
-            }
+            if (car == null) return;
 
             bool confirm = await Shell.Current.DisplayAlert(
                 "Megerősítés",
@@ -122,6 +150,7 @@ namespace CarServiceShopMAUI.ViewModels
 
                 if (success)
                 {
+                    _allCars.Remove(car);
                     Cars.Remove(car);
                     Debug.WriteLine("✅ Car deleted successfully");
                     await Shell.Current.DisplayAlert("Siker", "Autó törölve!", "OK");
@@ -141,11 +170,7 @@ namespace CarServiceShopMAUI.ViewModels
 
         private async Task ViewServicesAsync(Car car)
         {
-            if (car == null)
-            {
-                Debug.WriteLine("⚠️ ViewServicesAsync: car is null");
-                return;
-            }
+            if (car == null) return;
 
             try
             {
@@ -164,11 +189,7 @@ namespace CarServiceShopMAUI.ViewModels
 
         private async Task CopyLicensePlateAsync(Car car)
         {
-            if (car == null || string.IsNullOrWhiteSpace(car.LicensePlate))
-            {
-                Debug.WriteLine("⚠️ CopyLicensePlateAsync: car or LicensePlate is null/empty");
-                return;
-            }
+            if (car == null || string.IsNullOrWhiteSpace(car.LicensePlate)) return;
 
             try
             {

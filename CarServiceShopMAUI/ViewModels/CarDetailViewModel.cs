@@ -3,6 +3,8 @@ using CarServiceShopMAUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using Microsoft.Maui.Controls;
+using System.IO;
 
 namespace CarServiceShopMAUI.ViewModels
 {
@@ -17,69 +19,70 @@ namespace CarServiceShopMAUI.ViewModels
         [ObservableProperty]
         private string pageTitle = "Új autó";
 
-        [ObservableProperty]
-        private string brand = string.Empty;
+        [ObservableProperty] private string brand = string.Empty;
+        [ObservableProperty] private string model = string.Empty;
+        [ObservableProperty] private string licensePlate = string.Empty;
+        [ObservableProperty] private int yearOfManufacture = DateTime.Now.Year;
+        [ObservableProperty] private DateTime dateOfTechnicalInspection = DateTime.Now.AddYears(1);
+        [ObservableProperty] private string ownerName = string.Empty;
+        [ObservableProperty] private string ownerAddress = string.Empty;
+        [ObservableProperty] private string ownerPhone = string.Empty;
+        [ObservableProperty] private string vin = string.Empty;
+        [ObservableProperty] private int mileage;
 
         [ObservableProperty]
-        private string model = string.Empty;
-
-        [ObservableProperty]
-        private string licensePlate = string.Empty;
-
-        [ObservableProperty]
-        private int year = DateTime.Now.Year;
-
-        [ObservableProperty]
-        private string ownerName = string.Empty;
-
-        [ObservableProperty]
-        private string ownerAddress = string.Empty;
-
-        [ObservableProperty]
-        private string ownerPhone = string.Empty;
-
-        [ObservableProperty]
-        private string vin = string.Empty;
-
-        [ObservableProperty]
-        private int mileage;
+        private byte[]? imageData; // A mentéshez (byte[])
 
         [ObservableProperty]
         private bool isEdit;
 
         [ObservableProperty]
-        private byte[] imageData;
+        private bool hasImage;
 
+        [ObservableProperty]
+        private ImageSource? imageSource;
+
+        public IAsyncRelayCommand PickImageCommand { get; }
+        public IAsyncRelayCommand TakePhotoCommand { get; }
+        public IAsyncRelayCommand RemoveImageCommand { get; }
         public IAsyncRelayCommand SaveCommand { get; }
         public IAsyncRelayCommand CancelCommand { get; }
-        public IAsyncRelayCommand PickImageCommand { get; }
 
         public CarDetailViewModel(ApiService apiService)
         {
             _apiService = apiService;
-
+            PickImageCommand = new AsyncRelayCommand(PickImageAsync);
+            TakePhotoCommand = new AsyncRelayCommand(TakePhotoAsync);
+            RemoveImageCommand = new AsyncRelayCommand(RemoveImageAsync);
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
-            PickImageCommand = new AsyncRelayCommand(PickImageAsync);
-
-            Debug.WriteLine("🏗️ CarDetailViewModel created");
         }
 
-        // ✅ KRITIKUS: CarId alapján állítsd be az IsEdit-et!
+        // Automatikusan hívódik, ha változik az ImageData
+        partial void OnImageDataChanged(byte[]? value)
+        {
+            if (value != null && value.Length > 0)
+            {
+                HasImage = true;
+                ImageSource = ImageSource.FromStream(() => new MemoryStream(value));
+            }
+            else
+            {
+                HasImage = false;
+                ImageSource = null;
+            }
+        }
+
         partial void OnCarIdChanged(int value)
         {
-            Debug.WriteLine($"📝 CarId changed to: {value}");
-
             if (value > 0)
             {
-                // ✅ Van ID → Szerkesztés
                 IsEdit = true;
                 PageTitle = "Autó szerkesztése";
                 _ = LoadCarAsync(value);
             }
             else
             {
-                // ✅ Nincs ID (0) → Új autó
                 IsEdit = false;
                 PageTitle = "Új autó";
             }
@@ -89,23 +92,20 @@ namespace CarServiceShopMAUI.ViewModels
         {
             try
             {
-                Debug.WriteLine($"🔄 Loading car with ID: {id}");
                 var car = await _apiService.GetCarByIdAsync(id);
-
                 if (car != null)
                 {
                     Brand = car.Brand;
                     Model = car.Model;
                     LicensePlate = car.LicensePlate;
-                    Year = car.YearOfManufacture;
+                    YearOfManufacture = car.YearOfManufacture;
+                    DateOfTechnicalInspection = car.DateOfTechnicalInspection;
                     OwnerName = car.OwnerName ?? string.Empty;
                     OwnerAddress = car.OwnerAddress ?? string.Empty;
                     OwnerPhone = car.OwnerPhone ?? string.Empty;
                     Vin = car.Vin ?? string.Empty;
                     Mileage = car.Mileage;
                     ImageData = car.ImageData;
-
-                    Debug.WriteLine($"✅ Car loaded: {car.Brand} {car.Model}");
                 }
             }
             catch (Exception ex)
@@ -114,44 +114,71 @@ namespace CarServiceShopMAUI.ViewModels
             }
         }
 
+        // ✅ Gallériából kép választása
+        private async Task PickImageAsync()
+        {
+            try
+            {
+                var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions { Title = "Kép kiválasztása" });
+                if (result != null)
+                {
+                    using var stream = await result.OpenReadAsync();
+                    using var ms = new MemoryStream();
+                    await stream.CopyToAsync(ms);
+                    ImageData = ms.ToArray(); // Trigger OnImageDataChanged
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Hiba", "Nem sikerült betölteni a képet! " + ex.Message, "OK");
+            }
+        }
+
+        // ✅ Fotózás
+        private async Task TakePhotoAsync()
+        {
+            try
+            {
+                var result = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions { Title = "Fotó készítése" });
+                if (result != null)
+                {
+                    using var stream = await result.OpenReadAsync();
+                    using var ms = new MemoryStream();
+                    await stream.CopyToAsync(ms);
+                    ImageData = ms.ToArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Hiba", "Nem sikerült fotót készíteni! " + ex.Message, "OK");
+            }
+        }
+
+        // ✅ Kép törlése
+        private async Task RemoveImageAsync()
+        {
+            ImageData = null;
+            await Task.CompletedTask;
+        }
+
         private async Task SaveAsync()
         {
             try
             {
-                Debug.WriteLine($"💾 Save started - CarId: {CarId}, IsEdit: {IsEdit}");
-
-                // Validációk
-                if (string.IsNullOrWhiteSpace(Brand))
+                if (string.IsNullOrWhiteSpace(Brand) || string.IsNullOrWhiteSpace(Model) || string.IsNullOrWhiteSpace(LicensePlate))
                 {
-                    await Shell.Current.DisplayAlert("Hiba", "A márka megadása kötelező!", "OK");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(Model))
-                {
-                    await Shell.Current.DisplayAlert("Hiba", "A modell megadása kötelező!", "OK");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(LicensePlate))
-                {
-                    await Shell.Current.DisplayAlert("Hiba", "A rendszám megadása kötelező!", "OK");
-                    return;
-                }
-
-                if (Year < 1900 || Year > DateTime.Now.Year + 1)
-                {
-                    await Shell.Current.DisplayAlert("Hiba", "Érvénytelen évjárat!", "OK");
+                    await Shell.Current.DisplayAlert("Hiba", "Márka, modell, rendszám kötelező!", "OK");
                     return;
                 }
 
                 var car = new Car
                 {
-                    Id = CarId,  
+                    Id = CarId,
                     Brand = Brand.Trim(),
                     Model = Model.Trim(),
                     LicensePlate = LicensePlate.Trim().ToUpper(),
-                    YearOfManufacture = Year,
+                    YearOfManufacture = YearOfManufacture,
+                    DateOfTechnicalInspection = DateOfTechnicalInspection,
                     OwnerName = OwnerName?.Trim(),
                     OwnerAddress = OwnerAddress?.Trim(),
                     OwnerPhone = OwnerPhone?.Trim(),
@@ -160,68 +187,26 @@ namespace CarServiceShopMAUI.ViewModels
                     ImageData = ImageData
                 };
 
-                Debug.WriteLine($"📦 Car object: Id={car.Id}, Brand={car.Brand}, IsEdit={IsEdit}");
-
                 bool success;
 
-                
                 if (IsEdit && CarId > 0)
-                {
-                    Debug.WriteLine($"✏️ UPDATING car ID: {car.Id}");
                     success = await _apiService.UpdateCarAsync(car);
-                }
                 else
-                {
-                    Debug.WriteLine($"➕ ADDING new car: {car.Brand} {car.Model}");
                     success = await _apiService.AddCarAsync(car);
-                }
-
-                Debug.WriteLine($"🔍 API result: {success}");
 
                 if (success)
                 {
-                    Debug.WriteLine("✅ Save successful!");
-                    await Shell.Current.DisplayAlert("Siker",
-                        IsEdit ? "Autó módosítva!" : "Autó hozzáadva!",
-                        "OK");
+                    await Shell.Current.DisplayAlert("Siker", IsEdit ? "Autó frissítve!" : "Autó hozzáadva!", "OK");
                     await Shell.Current.GoToAsync("..");
                 }
                 else
                 {
-                    Debug.WriteLine("❌ Save failed - API returned false");
                     await Shell.Current.DisplayAlert("Hiba", "Nem sikerült menteni!", "OK");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ EXCEPTION in SaveAsync: {ex}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 await Shell.Current.DisplayAlert("Hiba", $"Hiba történt: {ex.Message}", "OK");
-            }
-        }
-
-        private async Task PickImageAsync()
-        {
-            try
-            {
-                var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
-                {
-                    Title = "Válassz képet"
-                });
-
-                if (result != null)
-                {
-                    var stream = await result.OpenReadAsync();
-                    using var memoryStream = new MemoryStream();
-                    await stream.CopyToAsync(memoryStream);
-                    ImageData = memoryStream.ToArray();
-
-                    Debug.WriteLine($"✅ Image picked: {ImageData.Length} bytes");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"❌ Error picking image: {ex.Message}");
             }
         }
 

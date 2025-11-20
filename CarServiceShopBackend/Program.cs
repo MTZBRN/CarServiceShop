@@ -30,11 +30,11 @@ using (var scope = app.Services.CreateScope())
     {
         var cars = new List<Car>
     {
-        new Car { LicensePlate = "ABC-123", Brand = "Toyota", Model = "Corolla", YearOfManufacture = 2018, DateOfTechnicalInspection = new DateTime(2025,12,15), OwnerName = "Varga Péter", OwnerAddress = "Budapest, Fő utca 12.", OwnerPhone = "+3612345678", Vin = "VF1234567890", Mileage = 150000 },
-        new Car { LicensePlate = "XYZ-789", Brand = "BMW", Model = "320d", YearOfManufacture = 2020, DateOfTechnicalInspection = new DateTime(2026,3,20), OwnerName = "Kovács Anna", OwnerAddress = "Debrecen, Templom tér 7.", OwnerPhone = "+36701234567", Vin = "BMW3202020VIN", Mileage = 85000 },
-        new Car { LicensePlate = "DEF-456", Brand = "Volkswagen", Model = "Golf", YearOfManufacture = 2019, DateOfTechnicalInspection = new DateTime(2025,8,10), OwnerName = "Nagy Eszter", OwnerAddress = "Szeged, Petőfi sétány 10.", OwnerPhone = "+36601234567", Vin = "VWGOLF2019VIN", Mileage = 120000 },
-        new Car { LicensePlate = "GHI-321", Brand = "Audi", Model = "A4", YearOfManufacture = 2021, DateOfTechnicalInspection = new DateTime(2026,5,30), OwnerName = "Szabó Gábor", OwnerAddress = "Pécs, Rákóczi utca 5.", OwnerPhone = "+36301234567", Vin = "AUDIA42021VIN", Mileage = 65000 },
-        new Car { LicensePlate = "JKL-654", Brand = "Mercedes-Benz", Model = "C-Class", YearOfManufacture = 2022, DateOfTechnicalInspection = new DateTime(2026,11,5), OwnerName = "Tóth Mária", OwnerAddress = "Miskolc, Kossuth tér 4.", OwnerPhone = "+36401234567", Vin = "MBCC2022VIN", Mileage = 40000 }
+        new Car { LicensePlate = "ABC-123", Brand = "Toyota", Model = "Corolla", YearOfManufacture = 2018, DateOfTechnicalInspection = new DateTime(2025,12,15), OwnerName = "Varga Péter", OwnerAddress = "Budapest, Fő utca 12.", OwnerPhone = "+3612345678", Vin = "VF1234567890", Mileage = 150000, picture=null },
+        new Car { LicensePlate = "XYZ-789", Brand = "BMW", Model = "320d", YearOfManufacture = 2020, DateOfTechnicalInspection = new DateTime(2026,3,20), OwnerName = "Kovács Anna", OwnerAddress = "Debrecen, Templom tér 7.", OwnerPhone = "+36701234567", Vin = "BMW3202020VIN", Mileage = 85000,picture=null },
+        new Car { LicensePlate = "DEF-456", Brand = "Volkswagen", Model = "Golf", YearOfManufacture = 2019, DateOfTechnicalInspection = new DateTime(2025,8,10), OwnerName = "Nagy Eszter", OwnerAddress = "Szeged, Petőfi sétány 10.", OwnerPhone = "+36601234567", Vin = "VWGOLF2019VIN", Mileage = 120000 , picture = null},
+        new Car { LicensePlate = "GHI-321", Brand = "Audi", Model = "A4", YearOfManufacture = 2021, DateOfTechnicalInspection = new DateTime(2026,5,30), OwnerName = "Szabó Gábor", OwnerAddress = "Pécs, Rákóczi utca 5.", OwnerPhone = "+36301234567", Vin = "AUDIA42021VIN", Mileage = 65000 , picture = null},
+        new Car { LicensePlate = "JKL-654", Brand = "Mercedes-Benz", Model = "C-Class", YearOfManufacture = 2022, DateOfTechnicalInspection = new DateTime(2026,11,5), OwnerName = "Tóth Mária", OwnerAddress = "Miskolc, Kossuth tér 4.", OwnerPhone = "+36401234567", Vin = "MBCC2022VIN", Mileage = 40000 , picture = null}
     };
         context.Cars.AddRange(cars);
         context.SaveChanges();
